@@ -21,15 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity-->
-<!--            android:name=".AdminActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".UserActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".ModeSelectionActivity"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+       <activity
+            android:name=".AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ModeSelectionActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
