@@ -31,7 +31,7 @@ public class ModeSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 관리자 모드로 이동
-                Intent intent = new Intent(ModeSelectionActivity.this, AdminActivity.class);
+                Intent intent = new Intent(ModeSelectionActivity.this, AdminMainActivity.class);
                 startActivity(intent);
             }
         });

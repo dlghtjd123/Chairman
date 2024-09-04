@@ -34,14 +34,22 @@
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".ModeSelectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminMainActivity"
             android:exported="false" />
         <activity
             android:name=".UserActivity"
             android:exported="false" />
         <activity
-            android:name=".ModeSelectionActivity"
+            android:name=".Admin_Rentals"
             android:exported="false" />
+        <activity android:name=".Admin_Reservation"
+            android:exported="false" />
+        <activity android:name=".Admin_Account"
+            android:exported="false" />
+
     </application>
 
 </manifest>

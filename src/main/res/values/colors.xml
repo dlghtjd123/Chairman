@@ -6,4 +6,6 @@
     <color name="navItemColor">#8A8A8A</color> <!-- 기본 아이템 색상 (비활성화 상태) -->
     <color name="navItemColorSelected">#000000</color> <!-- 선택된 아이템 색상 -->
     <color name="bottomNavBackground">#FFFFFF</color> <!-- 네비게이션 배경 색상 -->
+    <color name="white">#FFFFFF</color> <!-- white 색상 정의 -->
+        <!-- 필요에 따라 다른 색상도 추가 -->
 </resources>
