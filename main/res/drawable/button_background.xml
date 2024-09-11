@@ -1,0 +1,17 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 클릭 시 어두운 회색 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#A9A9A9" /> <!-- 어두운 회색 -->
+            <corners android:radius="16dp" /> <!-- 둥근 모서리 -->
+        </shape>
+    </item>
+
+    <!-- 기본 상태에서는 밝은 회색 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#D3D3D3" /> <!-- 밝은 회색 -->
+            <corners android:radius="16dp" /> <!-- 둥근 모서리 -->
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="#808080" android:state_pressed="true"/> <!-- 눌렸을 때 어두운 회색 -->
+    <item android:color="#808080" android:state_selected="true"/> <!-- 선택되었을 때 어두운 회색 -->
+    <item android:color="#D3D3D3"/> <!-- 기본 밝은 회색 -->
+</selector>
