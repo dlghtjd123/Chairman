@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.chairman.AdminMainActivity;
 import com.example.chairman.R;
 import com.example.chairman.UserMainActivity;
+import com.example.chairman.model.LoginRequest;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextCode;
     private TextView TextCode;
     private Button btnLogin;
+    private Button btnSignUp;
     private RadioGroup radioGroupMode;
     private RadioButton radioUser;
     private RadioButton radioAdmin;
@@ -55,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         radioGroupMode = findViewById(R.id.radioGroupMode);
         radioUser = findViewById(R.id.radioUser);
         radioAdmin = findViewById(R.id.radioAdmin);
+        btnSignUp = findViewById(R.id.btnSignUp);
 
         apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
 
@@ -77,6 +80,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         btnLogin.setOnClickListener(v -> loginUser());
+
+        btnSignUp = findViewById(R.id.btnSignUp);
+        btnSignUp.setOnClickListener(v -> openSignUpActivity());
+    }
+
+    private void openSignUpActivity() {
+        Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+        startActivity(intent);
     }
 
     private void loginUser() {
@@ -139,4 +150,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 }
