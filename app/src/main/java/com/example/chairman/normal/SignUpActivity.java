@@ -1,17 +1,19 @@
-package com.example.chairman;
+package com.example.chairman.normal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.chairman.R;
 import com.example.chairman.model.UserCreateRequest;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
@@ -28,7 +30,10 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText editTextPhoneNumber;
     private EditText editTextAddress;
     private Button btnSignUp;
-    private RadioButton radioAdmin;  // 관리자 모드 체크박스 추가
+    private RadioButton radioAdmin;
+    private LinearLayout userModeLayout;
+    private LinearLayout adminModeLayout;
+    private RadioGroup radioGroupMode;
 
     private ApiService apiService;
 
@@ -43,9 +48,23 @@ public class SignUpActivity extends AppCompatActivity {
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         editTextAddress = findViewById(R.id.editTextAddress);
         btnSignUp = findViewById(R.id.btnSignUp);
-        radioAdmin = findViewById(R.id.radioAdmin);  // 관리자 모드 체크박스 초기화
+        radioAdmin = findViewById(R.id.radioAdmin);
+        userModeLayout = findViewById(R.id.userModeLayout);
+        adminModeLayout = findViewById(R.id.adminModeLayout);
+        radioGroupMode = findViewById(R.id.radioGroupMode);
 
         apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+
+        // RadioGroup 리스너 설정
+        radioGroupMode.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioAdmin) {
+                adminModeLayout.setVisibility(View.VISIBLE);
+                userModeLayout.setVisibility(View.GONE);
+            } else {
+                adminModeLayout.setVisibility(View.GONE);
+                userModeLayout.setVisibility(View.VISIBLE);
+            }
+        });
 
         btnSignUp.setOnClickListener(v -> signUpUser());
     }
@@ -56,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
         String name = editTextName.getText().toString().trim();
         String phoneNumber = editTextPhoneNumber.getText().toString().trim();
         String address = editTextAddress.getText().toString().trim();
-        boolean isAdmin = radioAdmin.isChecked(); // 관리자 모드 체크 여부
+        boolean isAdmin = radioAdmin.isChecked();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(name)
                 || TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(address)) {
