@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="20dp">
+
+    <!-- ScrollView 추가 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- 모드 선택 라디오 그룹 -->
+            <RadioGroup
+                android:id="@+id/radioGroupMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <RadioButton
+                    android:id="@+id/radioUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유저 모드"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/radioAdmin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관리자 모드"/>
+            </RadioGroup>
+
+            <!-- 사용자 모드 필드 -->
+            <LinearLayout
+                android:id="@+id/userModeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- 이메일 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Email"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- 비밀번호 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Password"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:inputType="textPassword"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- 이름 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Name"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- 전화번호 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Phone Number"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:inputType="phone"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- 주소 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Address"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+            </LinearLayout>
+
+            <!-- 관리자 모드 필드 -->
+            <LinearLayout
+                android:id="@+id/adminModeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!-- 코드 입력 -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Code"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/editTextCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Code"
+                    android:background="@drawable/input_background"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"/>
+            </LinearLayout>
+
+            <!-- 회원가입 버튼 -->
+            <Button
+                android:id="@+id/btnSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="회원가입"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="20dp"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
