@@ -15,9 +15,6 @@
         android:theme="@style/Theme.Chairman"
         tools:targetApi="31">
         <activity
-            android:name=".UserMainActivity"
-            android:exported="false" />
-        <activity
             android:name=".AdminMainActivity"
             android:exported="false" /> <!-- 회원가입 화면 -->
         <activity
@@ -35,6 +32,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".user.InstitutionDetailActivity"
+            android:exported="false" />
+        <activity android:name=".user.InstitutionListActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".UserMainActivity"
+            android:exported="false" />
     </application>
+
 
 </manifest>

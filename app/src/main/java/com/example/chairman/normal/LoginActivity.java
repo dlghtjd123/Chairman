@@ -20,6 +20,7 @@ import com.example.chairman.UserMainActivity;
 import com.example.chairman.model.LoginRequest;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
+import com.example.chairman.user.InstitutionListActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -137,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "로그인 성공!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, UserMainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, InstitutionListActivity.class));
                     finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "로그인 실패: " + response.message(), Toast.LENGTH_SHORT).show();
