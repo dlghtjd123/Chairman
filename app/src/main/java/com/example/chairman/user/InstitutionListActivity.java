@@ -23,7 +23,7 @@ public class InstitutionListActivity extends AppCompatActivity {
 
     private ListView institutionListView;
     private List<String> institutionNames = new ArrayList<>();
-    private List<Long> institutionIds = new ArrayList<>(); // 기관 ID 리스트
+    private List<Long> institutionCodes = new ArrayList<>(); // 기관 코드 리스트
     private ArrayAdapter<String> adapter;
 
     @Override
@@ -36,10 +36,11 @@ public class InstitutionListActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, institutionNames);
         institutionListView.setAdapter(adapter);
 
+        // 공공기관 클릭 이벤트
         institutionListView.setOnItemClickListener((adapterView, view, position, id) -> {
-            Long selectedInstitutionId = institutionIds.get(position);
-            Intent intent = new Intent(InstitutionListActivity.this, InstitutionDetailActivity.class);
-            intent.putExtra("institutionId", selectedInstitutionId);
+            Long selectedInstitutionCode = institutionCodes.get(position); // 선택한 기관 코드 가져오기
+            Intent intent = new Intent(InstitutionListActivity.this, WheelchairListActivity.class);
+            intent.putExtra("institutionCode", selectedInstitutionCode); // 코드 전달
             startActivity(intent);
         });
 
@@ -60,7 +61,7 @@ public class InstitutionListActivity extends AppCompatActivity {
                     // 공공기관 데이터 추가
                     for (InstitutionData institution : institutions) {
                         institutionNames.add(institution.getName());
-                        institutionIds.add(institution.getId());
+                        institutionCodes.add(institution.getInstitutionCode()); // 기관 코드 추가
                     }
 
                     // 어댑터에 변경 사항 적용

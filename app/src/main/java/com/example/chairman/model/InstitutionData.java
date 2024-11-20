@@ -3,7 +3,7 @@ package com.example.chairman.model;
 public class InstitutionData {
     private Long id;
     private String name;
-    private String institutionCode;
+    private Long institutionCode;
 
     // Getter와 Setter
     public Long getId() {
@@ -22,11 +22,11 @@ public class InstitutionData {
         this.name = name;
     }
 
-    public String getInstitutionCode() {
+    public Long getInstitutionCode() {
         return institutionCode;
     }
 
-    public void setInstitutionCode(String institutionCode) {
+    public void setInstitutionCode(Long institutionCode) {
         this.institutionCode = institutionCode;
     }
 }

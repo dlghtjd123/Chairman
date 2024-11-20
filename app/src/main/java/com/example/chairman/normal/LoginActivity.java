@@ -14,10 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.chairman.AdminMainActivity;
 import com.example.chairman.R;
-import com.example.chairman.UserMainActivity;
-import com.example.chairman.model.LoginRequest;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 import com.example.chairman.user.InstitutionListActivity;
@@ -118,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "관리자 로그인 성공!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, AdminMainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, InstitutionListActivity.class));
                     finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "로그인 실패: " + response.message(), Toast.LENGTH_SHORT).show();

@@ -3,6 +3,7 @@
     <style name="Base.Theme.Chairman" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimaryLight">@color/colorPrimaryLight</item>
     </style>
 
     <style name="Theme.Chairman" parent="Base.Theme.Chairman" />
