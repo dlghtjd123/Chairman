@@ -2,6 +2,10 @@ package com.example.chairman.model;
 
 public class RentalRequest {
     private Long institutionCode;
+    private String email;
+    private String wheelchairType; // 예: "ADULT", "CHILD"
+    private String rentalDate; // ISO 형식: "yyyy-MM-ddTHH:mm:ss"
+    private String returnDate; // ISO 형식: "yyyy-MM-ddTHH:mm:ss"
 
     public Long getInstitutionCode() {
         return institutionCode;
@@ -11,13 +15,9 @@ public class RentalRequest {
         this.institutionCode = institutionCode;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     public String getWheelchairType() {
         return wheelchairType;
@@ -43,8 +43,4 @@ public class RentalRequest {
         this.returnDate = returnDate;
     }
 
-    private String email;
-    private String wheelchairType; // 예: "ADULT", "CHILD"
-    private String rentalDate; // ISO 형식: "yyyy-MM-ddTHH:mm:ss"
-    private String returnDate; // ISO 형식: "yyyy-MM-ddTHH:mm:ss"
 }

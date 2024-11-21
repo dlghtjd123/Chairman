@@ -77,4 +77,5 @@ public class InstitutionListActivity extends AppCompatActivity {
             }
         });
     }
+
 }

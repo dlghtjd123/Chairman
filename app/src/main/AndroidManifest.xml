@@ -15,9 +15,11 @@
         android:theme="@style/Theme.Chairman"
         tools:targetApi="31">
         <activity
-            android:name=".user.RentalActivity"
+            android:name=".user.ProfileActivity"
             android:exported="false" />
-        <!-- 회원가입 화면 -->
+        <activity
+            android:name=".user.RentalActivity"
+            android:exported="false" /> <!-- 회원가입 화면 -->
         <activity
             android:name=".normal.SignUpActivity"
             android:exported="false" /> <!-- 로그인 화면: 앱이 시작될 때 첫 화면으로 설정 -->
@@ -38,9 +40,6 @@
             android:exported="false" />
         <activity
             android:name=".user.WheelchairListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".user.AvailableWheelchairActivity"
             android:exported="false" />
     </application>
 

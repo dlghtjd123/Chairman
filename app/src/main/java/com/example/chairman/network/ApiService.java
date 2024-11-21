@@ -13,19 +13,21 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
 
-    // 유저 로그인 API
     @POST("/normal/login")
-    Call<Void> userLogin(@Query("email") String email, @Query("password") String password);
+    Call<LoginResponse> userLogin(@Body LoginRequest loginRequest);
 
-    // 관리자 로그인 API
+    // 관리자 로그인
     @POST("/admin/login")
-    Call<Void> adminLogin(@Query("code") String code);
+    Call<LoginResponse> adminLogin(
+            @Query("code") String code
+    );
 
     // 회원가입 API
     @POST("/normal/signup")
@@ -39,17 +41,25 @@ public interface ApiService {
     @GET("/user/{institutionCode}/available-count")
     Call<Map<String, Integer>> getAvailableWheelchairCounts(@Path("institutionCode") Long institutionCode);
 
+    // 사용자 정보 조회 API
+    @GET("/user/info")
+    Call<Map<String, String>> getUserInfo(@Header("Authorization") String authorization);
 
     // 특정 기관의 휠체어 상태별 개수 조회
     @GET("admin/{institutionCode}/wheelchair/count")
     Call<Map<String, Integer>> getWheelchairCountsByInstitution(@Path("institutionCode") Long institutionCode);
 
-    // 대여 요청
+    //대여 요청
     @POST("/rental/{institutionCode}/rent")
     Call<RentalResponse> rentWheelchair(
+            @Header("Authorization") String authorization,
             @Path("institutionCode") Long institutionCode,
             @Body RentalRequest rentalRequest
     );
+
+    // 대여 정보 조회 API
+    @GET("/rental/info")
+    Call<RentalResponse> getRentalInfo(@Header("Authorization") String authorization);
 
     // 대여 목록 조회
     @GET("/rental/list")
@@ -71,19 +81,11 @@ public interface ApiService {
     @POST("/rental/cancel")
     Call<RentalResponse> cancelRental();
 
-    @GET("/rental/available-dates")
-    Call<List<String>> getAvailableDates(
-            @Query("institutionCode") Long institutionCode,
-            @Query("wheelchairType") String wheelchairType
-    );
-
     @POST("/rental/rent")
     Call<Void> rentWheelchair(
             @Query("institutionCode") Long institutionCode,
             @Query("wheelchairType") String wheelchairType,
             @Query("rentalDate") String rentalDate
     );
-
-
 
 }

@@ -1,13 +1,13 @@
 package com.example.chairman.model;
 
 public class LoginResponse {
-    private String token;
+    private String jwtToken;
 
-    public String getToken() {
-        return token;
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
     }
 }

@@ -2,14 +2,21 @@ package com.example.chairman.user;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
+import com.example.chairman.model.RentalResponse;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 
@@ -23,6 +30,9 @@ public class WheelchairListActivity extends AppCompatActivity {
 
     private Button adultButton;
     private Button childButton;
+    private Button checkRentalButton;
+    private Button profileButton; // 프로필 버튼 추가
+    private SharedPreferences sharedPreferences;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -34,6 +44,22 @@ public class WheelchairListActivity extends AppCompatActivity {
         adultButton = findViewById(R.id.adult_button);
         childButton = findViewById(R.id.child_button);
 
+        // 툴바 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);  // 액션바로 툴바 설정
+
+        adultButton = findViewById(R.id.adult_button);
+        childButton = findViewById(R.id.child_button);
+        checkRentalButton = findViewById(R.id.check_rental_button);
+        profileButton = findViewById(R.id.profile_button); // 프로필 버튼 초기화
+
+        // "대여 확인" 버튼 클릭 이벤트 추가
+        checkRentalButton.setOnClickListener(v -> checkRentalStatus());
+
+        // 프로필 버튼 클릭 이벤트
+        profileButton.setOnClickListener(v -> openProfileActivity());
+
+
         // Intent로부터 institutionCode 가져오기
         Long institutionCode = getIntent().getLongExtra("institutionCode", -1L);
 
@@ -43,9 +69,6 @@ public class WheelchairListActivity extends AppCompatActivity {
             finish();
             return;
         }
-
-        // institutionCode 로그로 확인
-        Log.d("WheelchairListActivity", "Received institutionCode: " + institutionCode);
 
         // API 호출로 데이터 가져오기
         fetchAvailableCounts(institutionCode);
@@ -90,6 +113,11 @@ public class WheelchairListActivity extends AppCompatActivity {
         });
     }
 
+    public void openProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class); // ProfileActivity로 이동
+        startActivity(intent);
+    }
+
     /**
      * RentalActivity로 이동하는 함수
      *
@@ -101,5 +129,39 @@ public class WheelchairListActivity extends AppCompatActivity {
         intent.putExtra("institutionCode", institutionCode);
         intent.putExtra("wheelchairType", wheelchairType);
         startActivity(intent);
+    }
+
+    // 대여 상태 확인 메서드
+    private void checkRentalStatus() {
+        String jwtToken = sharedPreferences.getString("jwtToken", null);
+
+        if (jwtToken == null) {
+            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+        Call<RentalResponse> call = apiService.getRentalInfo("Bearer " + jwtToken);
+
+        call.enqueue(new Callback<RentalResponse>() {
+            @Override
+            public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RentalResponse rental = response.body();
+                    String rentalInfo = "대여 상태: " + rental.getStatus() +
+                            "\n대여 코드: " + rental.getRentalCode() +
+                            "\n대여일: " + rental.getRentalDate() +
+                            "\n반납일: " + rental.getReturnDate();
+                    Toast.makeText(WheelchairListActivity.this, rentalInfo, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(WheelchairListActivity.this, "현재 대여 내역이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RentalResponse> call, Throwable t) {
+                Toast.makeText(WheelchairListActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

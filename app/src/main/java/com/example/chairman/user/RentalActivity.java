@@ -2,32 +2,33 @@ package com.example.chairman.user;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
+import com.example.chairman.model.RentalRequest;
+import com.example.chairman.model.RentalResponse;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
-
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.android.material.timepicker.MaterialTimePicker;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Calendar;
+
 public class RentalActivity extends AppCompatActivity {
 
-    private Button selectDateButton, rentButton;
-    private ImageView wheelchairImage;
-    private Set<String> availableDates = new HashSet<>(); // 대여 가능한 날짜
-    private String selectedDate; // 선택한 날짜를 저장
+    private Button rentDateButton, returnDateButton, rentButton;
+    private String selectedRentDate = null;  // 대여일
+    private String selectedReturnDate = null;  // 반납일
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -35,103 +36,168 @@ public class RentalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rental);
 
-        selectDateButton = findViewById(R.id.select_date_button);
-        rentButton = findViewById(R.id.rent_button);
-        wheelchairImage = findViewById(R.id.wheelchair_image);
+        // SharedPreferences에서 JWT 토큰 불러오기
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("jwtToken", null);
 
-        // 기관 코드와 휠체어 타입을 이전 액티비티에서 전달받음
+        if (jwtToken == null) {
+            Log.e("RentalActivity", "SharedPreferences에서 JWT 토큰을 찾을 수 없습니다.");
+            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        } else {
+            Log.d("RentalActivity", "불러온 JWT 토큰: " + jwtToken);
+        }
+
+
+
+        // Intent 데이터 가져오기
         Long institutionCode = getIntent().getLongExtra("institutionCode", -1L);
         String wheelchairType = getIntent().getStringExtra("wheelchairType");
 
         if (institutionCode == -1L || wheelchairType == null) {
-            Toast.makeText(this, "기관 정보가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "필요한 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        // 대여 가능한 날짜 API 호출
-        fetchAvailableDates(institutionCode, wheelchairType);
+        // 버튼 초기화
+        rentDateButton = findViewById(R.id.rent_date_button);
+        returnDateButton = findViewById(R.id.return_date_button);
+        rentButton = findViewById(R.id.rent_button);
 
-        // 달력 버튼 클릭 시 달력 표시
-        selectDateButton.setOnClickListener(v -> showDatePicker());
+        rentDateButton.setOnClickListener(v -> showDateTimePicker(true));
+        returnDateButton.setOnClickListener(v -> showDateTimePicker(false));
 
-        // 대여하기 버튼 클릭 시 대여 요청
+        // 대여하기 버튼 클릭 이벤트
         rentButton.setOnClickListener(v -> {
-            if (selectedDate == null) {
-                Toast.makeText(this, "대여 날짜를 선택해주세요.", Toast.LENGTH_SHORT).show();
-            } else {
-                rentWheelchair(institutionCode, wheelchairType, selectedDate);
+            if (selectedRentDate == null || selectedReturnDate == null) {
+                Toast.makeText(this, "대여일과 반납일을 모두 선택해주세요.", Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
-    }
 
-    private void fetchAvailableDates(Long institutionCode, String wheelchairType) {
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        Call<List<String>> call = apiService.getAvailableDates(institutionCode, wheelchairType);
+            // 대여 요청 데이터 생성
+            RentalRequest rentalRequest = new RentalRequest();
+            rentalRequest.setInstitutionCode(institutionCode);
+            rentalRequest.setWheelchairType(wheelchairType.toUpperCase());
+            rentalRequest.setRentalDate(selectedRentDate);
+            rentalRequest.setReturnDate(selectedReturnDate);
 
-        call.enqueue(new Callback<List<String>>() {
-            @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    availableDates.addAll(response.body()); // 서버에서 받아온 날짜 저장
-                } else {
-                    Toast.makeText(RentalActivity.this, "대여 가능한 날짜를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            // 로그로 확인
+            Log.d("RentalActivity", "Request Body: " + rentalRequest);
+
+            // 서버로 요청 전송
+            ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+            Call<RentalResponse> call = apiService.rentWheelchair("Bearer " + jwtToken, institutionCode, rentalRequest);
+
+            call.enqueue(new Callback<RentalResponse>() {
+                @Override
+                public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        RentalResponse rentalResponse = response.body();
+                        Toast.makeText(RentalActivity.this,
+                                "대여 성공!\n대여 코드: " + rentalResponse.getRentalCode() +
+                                        "\n상태: " + rentalResponse.getStatus(),
+                                Toast.LENGTH_LONG).show();
+                        finish();
+                    } else {
+                        Log.e("RentalActivity", "대여 요청 실패 - 코드: " + response.code() + ", 메시지: " + response.message());
+                        Log.e("RentalActivity", "에러 내용: " + response.errorBody());
+                        Toast.makeText(RentalActivity.this, "대여 요청 실패: " + response.message(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
-                Toast.makeText(RentalActivity.this, "서버 연결 실패", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onFailure(Call<RentalResponse> call, Throwable t) {
+                    Toast.makeText(RentalActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
     }
 
-    private void showDatePicker() {
+    private void showDateTimePicker(boolean isRentDate) {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
-            String formattedDate = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
-            if (availableDates.contains(formattedDate)) {
-                selectedDate = formattedDate;
-                Toast.makeText(this, "선택된 날짜: " + formattedDate, Toast.LENGTH_SHORT).show();
-            } else {
-                selectedDate = null;
-                Toast.makeText(this, "선택한 날짜는 대여가 불가능합니다.", Toast.LENGTH_SHORT).show();
-            }
+        // 날짜 선택
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, (dateView, selectedYear, selectedMonth, selectedDay) -> {
+            // 시간 선택
+            MaterialTimePicker.Builder timePickerBuilder = new MaterialTimePicker.Builder()
+                    .setTimeFormat(android.text.format.DateFormat.is24HourFormat(this)
+                            ? com.google.android.material.timepicker.TimeFormat.CLOCK_24H
+                            : com.google.android.material.timepicker.TimeFormat.CLOCK_12H)
+                    .setHour(calendar.get(Calendar.HOUR_OF_DAY))
+                    .setMinute(calendar.get(Calendar.MINUTE))
+                    .setTitleText("시간 선택");
+
+            MaterialTimePicker timePicker = timePickerBuilder.build();
+
+            timePicker.addOnPositiveButtonClickListener(view -> {
+                int selectedHour = timePicker.getHour();
+                int selectedMinute = timePicker.getMinute();
+
+                // 날짜와 시간 결합하여 형식 지정
+                String formattedDateTime = formatDateTime(selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute);
+
+                if (isRentDate) {
+                    selectedRentDate = formattedDateTime;
+                    rentDateButton.setText("대여일: " + formattedDateTime.replace("T", " "));
+                    Toast.makeText(this, "대여일 선택: " + formattedDateTime, Toast.LENGTH_SHORT).show();
+
+                    // 대여일 선택 후 반납일 초기화
+                    selectedReturnDate = null;
+                    returnDateButton.setText("반납일 선택");
+                } else {
+                    if (selectedRentDate != null && !isReturnDateValid(selectedRentDate, formattedDateTime)) {
+                        Toast.makeText(this, "반납일은 대여일 이후여야 합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    selectedReturnDate = formattedDateTime;
+                    returnDateButton.setText("반납일: " + formattedDateTime.replace("T", " "));
+                    Toast.makeText(this, "반납일 선택: " + formattedDateTime, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            timePicker.show(getSupportFragmentManager(), "MATERIAL_TIME_PICKER");
         }, year, month, day);
 
-        // 최소 날짜를 현재 날짜로 설정
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // 최소 날짜 설정
+        if (isRentDate) {
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        } else {
+            if (selectedRentDate != null) {
+                Calendar rentDate = Calendar.getInstance();
+                String[] rentDateParts = selectedRentDate.split("T")[0].split("-");
+                rentDate.set(Calendar.YEAR, Integer.parseInt(rentDateParts[0]));
+                rentDate.set(Calendar.MONTH, Integer.parseInt(rentDateParts[1]) - 1);
+                rentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(rentDateParts[2]));
+                datePickerDialog.getDatePicker().setMinDate(rentDate.getTimeInMillis());
+            }
+        }
 
-        // 최대 날짜는 1개월 후로 설정
-        calendar.add(Calendar.MONTH, 1);
+        // 최대 날짜 설정 (2주 후)
+        calendar.add(Calendar.WEEK_OF_YEAR, 2);
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-
         datePickerDialog.show();
     }
 
-    private void rentWheelchair(Long institutionCode, String wheelchairType, String rentalDate) {
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        Call<Void> call = apiService.rentWheelchair(institutionCode, wheelchairType, rentalDate);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(RentalActivity.this, "대여가 성공적으로 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                    finish(); // 대여 완료 후 액티비티 종료
-                } else {
-                    Toast.makeText(RentalActivity.this, "대여에 실패했습니다.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(RentalActivity.this, "서버 연결 실패", Toast.LENGTH_SHORT).show();
-            }
-        });
+    /**
+     * 날짜와 시간을 "yyyy-MM-dd'T'HH:mm:ss" 형식으로 포맷팅
+     */
+    private String formatDateTime(int year, int month, int day, int hour, int minute) {
+        return String.format("%04d-%02d-%02dT%02d:%02d:00", year, month + 1, day, hour, minute);
     }
+
+    /**
+     * 반납일이 대여일 이후인지 검증
+     */
+    private boolean isReturnDateValid(String rentDate, String returnDate) {
+        return returnDate.compareTo(rentDate) >= 0;
+    }
+
+
+
 }

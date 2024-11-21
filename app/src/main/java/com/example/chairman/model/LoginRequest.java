@@ -9,7 +9,12 @@ public class LoginRequest {
         this.password = password;
     }
 
-    // 게터 및 세터
-    public String getemail() { return email; }
-    public String getPassword() { return password; }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
+

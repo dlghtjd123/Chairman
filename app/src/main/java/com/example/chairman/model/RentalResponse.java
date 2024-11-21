@@ -2,6 +2,10 @@ package com.example.chairman.model;
 
 public class RentalResponse {
     private Long rentalId;
+    private String rentalCode;
+    private String status; // WAITING, ACTIVE, CANCELLED, etc.
+    private String rentalDate;
+    private String returnDate;
 
     public Long getRentalId() {
         return rentalId;
@@ -43,9 +47,5 @@ public class RentalResponse {
         this.returnDate = returnDate;
     }
 
-    private String rentalCode;
-    private String status; // WAITING, ACTIVE, CANCELLED, etc.
-    private String rentalDate;
-    private String returnDate;
 
 }
