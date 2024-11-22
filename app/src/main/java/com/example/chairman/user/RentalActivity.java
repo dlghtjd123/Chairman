@@ -68,6 +68,9 @@ public class RentalActivity extends AppCompatActivity {
 
         rentDateButton.setOnClickListener(v -> showDateTimePicker(true));
         returnDateButton.setOnClickListener(v -> showDateTimePicker(false));
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> finish());
+
 
         // 대여하기 버튼 클릭 이벤트
         rentButton.setOnClickListener(v -> {
@@ -103,7 +106,7 @@ public class RentalActivity extends AppCompatActivity {
                     } else {
                         Log.e("RentalActivity", "대여 요청 실패 - 코드: " + response.code() + ", 메시지: " + response.message());
                         Log.e("RentalActivity", "에러 내용: " + response.errorBody());
-                        Toast.makeText(RentalActivity.this, "대여 요청 실패: " + response.message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RentalActivity.this, "이미 대여중입니다." + response.message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

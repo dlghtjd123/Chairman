@@ -4,6 +4,8 @@ public class InstitutionData {
     private Long id;
     private String name;
     private Long institutionCode;
+    private String address;
+    private String telNumber;
 
     // Getter와 Setter
     public Long getId() {
@@ -26,7 +28,13 @@ public class InstitutionData {
         return institutionCode;
     }
 
-    public void setInstitutionCode(Long institutionCode) {
-        this.institutionCode = institutionCode;
-    }
+    public void setInstitutionCode(Long institutionCode) { this.institutionCode = institutionCode; }
+
+    public String getTelNumber() { return telNumber; }
+
+    public void setTelNumber(String telNumber) { this.telNumber = telNumber; }
+
+    public String getAddress() { return address; }
+
+    public void setAddress(String address) { this.address = address; }
 }

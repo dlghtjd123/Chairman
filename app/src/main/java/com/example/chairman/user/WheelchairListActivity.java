@@ -40,27 +40,27 @@ public class WheelchairListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wheelchair_list);
 
-        // 버튼 초기화
-        adultButton = findViewById(R.id.adult_button);
-        childButton = findViewById(R.id.child_button);
+        // SharedPreferences 초기화
+        sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
 
-        // 툴바 설정
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);  // 액션바로 툴바 설정
-
+        // 모든 버튼 초기화
         adultButton = findViewById(R.id.adult_button);
         childButton = findViewById(R.id.child_button);
         checkRentalButton = findViewById(R.id.check_rental_button);
-        profileButton = findViewById(R.id.profile_button); // 프로필 버튼 초기화
+        profileButton = findViewById(R.id.profile_button);
 
         // "대여 확인" 버튼 클릭 이벤트 추가
         checkRentalButton.setOnClickListener(v -> checkRentalStatus());
 
-        // 프로필 버튼 클릭 이벤트
+        // 프로필 버튼 클릭 이벤트 추가
         profileButton.setOnClickListener(v -> openProfileActivity());
 
+        // Toolbar 설정
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Intent로부터 institutionCode 가져오기
+        // Intent에서 institutionCode 가져오기
         Long institutionCode = getIntent().getLongExtra("institutionCode", -1L);
 
         if (institutionCode == -1L) {
@@ -132,7 +132,13 @@ public class WheelchairListActivity extends AppCompatActivity {
     }
 
     // 대여 상태 확인 메서드
+    // RentalInfoActivity로 이동하는 코드
     private void checkRentalStatus() {
+        if (sharedPreferences == null) {
+            Toast.makeText(this, "로그인 정보가 없습니다. 다시 로그인 해주세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String jwtToken = sharedPreferences.getString("jwtToken", null);
 
         if (jwtToken == null) {
@@ -148,11 +154,15 @@ public class WheelchairListActivity extends AppCompatActivity {
             public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     RentalResponse rental = response.body();
-                    String rentalInfo = "대여 상태: " + rental.getStatus() +
-                            "\n대여 코드: " + rental.getRentalCode() +
-                            "\n대여일: " + rental.getRentalDate() +
-                            "\n반납일: " + rental.getReturnDate();
-                    Toast.makeText(WheelchairListActivity.this, rentalInfo, Toast.LENGTH_LONG).show();
+
+                    // RentalInfoActivity로 이동
+                    Intent intent = new Intent(WheelchairListActivity.this, RentalInfoActivity.class);
+                    intent.putExtra("institutionCode", rental.getInstitutionCode());
+                    intent.putExtra("rentalStatus", rental.getStatus());
+                    intent.putExtra("rentalDate", rental.getRentalDate());
+                    intent.putExtra("returnDate", rental.getReturnDate());
+                    startActivity(intent);
+
                 } else {
                     Toast.makeText(WheelchairListActivity.this, "현재 대여 내역이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -164,4 +174,75 @@ public class WheelchairListActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = getIntent();
+        boolean skipStatusCheck = intent.getBooleanExtra("skipStatusCheck", false);
+
+        // 상태 확인을 건너뛰는 경우
+        if (skipStatusCheck) {
+            intent.removeExtra("skipStatusCheck");
+            return;
+        }
+
+        // Intent에서 institutionCode 가져오기
+        Long institutionCode = intent.getLongExtra("institutionCode", -1L);
+
+        if (institutionCode != -1L) {
+            // 데이터를 새로 가져오기 (화면 갱신)
+            fetchAvailableCounts(institutionCode);
+        } else {
+            Log.e("WheelchairListActivity", "기관 코드가 전달되지 않았습니다.");
+            Toast.makeText(this, "기관 선택이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed(); // 뒤로가기 버튼 동작
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void cancelRental(Long institutionCode) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String jwtToken = sharedPreferences.getString("jwtToken", null);
+
+        if (jwtToken == null) {
+            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
+        Call<Void> call = apiService.cancelRental(institutionCode, "Bearer " + jwtToken);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(WheelchairListActivity.this, "대여가 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show();
+
+                    // 상태 초기화 등 필요하면 추가 처리
+                    finish(); // 현재 액티비티 종료
+                } else {
+                    Toast.makeText(WheelchairListActivity.this, "대여 취소에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(WheelchairListActivity.this, "서버 연결에 실패했습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

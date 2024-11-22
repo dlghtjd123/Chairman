@@ -3,7 +3,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- AppBarLayout에 Toolbar 추가 -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -11,68 +13,72 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" />
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- 콘텐츠 영역 -->
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
         android:background="#FFFFFF"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/adult_button"
+            style="@null"
             android:layout_width="200dp"
             android:layout_height="100dp"
             android:layout_marginBottom="16dp"
-            android:text="성인용 대여 가능: \n0"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:gravity="center"
             android:background="@drawable/button_selector"
-            app:backgroundTint="@null"
-            style="@null" />
+            android:gravity="center"
+            android:text="성인용 대여 가능: \n0"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:backgroundTint="@null" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/child_button"
+            style="@null"
             android:layout_width="200dp"
             android:layout_height="100dp"
             android:layout_marginBottom="16dp"
-            android:text="유아용 대여 가능: \n0"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:gravity="center"
             android:background="@drawable/button_selector"
-            app:backgroundTint="@null"
-            style="@null" />
+            android:gravity="center"
+            android:text="유아용 대여 가능: \n0"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/check_rental_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="대여 확인"
             android:layout_marginTop="16dp"
-            android:textSize="16sp"
             android:backgroundTint="#000000"
-            android:textColor="#FFFFFF" />
+            android:text="대여 확인"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
-    <!-- 프로필 이동 버튼 (우측 상단) -->
+    <!-- 프로필 버튼을 오른쪽 상단에 배치 -->
     <Button
         android:id="@+id/profile_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#FF9999"
         android:text="Profile"
         android:textColor="#FFFFFF"
-        android:backgroundTint="#000000"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:onClick="openProfileActivity" />
+        app:layout_anchor="@+id/appBarLayout"
+        app:layout_anchorGravity="end|top" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

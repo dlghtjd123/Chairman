@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
@@ -41,4 +40,16 @@
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:backgroundTint="#0000FF" />
+
+    <!-- 뒤로가기 버튼 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="bottom"
+        android:text="뒤로가기"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#808080" />
 </LinearLayout>

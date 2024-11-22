@@ -60,5 +60,17 @@
             android:text="로그아웃"
             android:backgroundTint="#A52A2A"
             android:textColor="@android:color/white" />
+
+        <!-- 뒤로가기 버튼 -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/back_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="bottom"
+            android:text="뒤로가기"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#808080" />
     </LinearLayout>
 </ScrollView>

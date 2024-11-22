@@ -41,6 +41,10 @@ public class ProfileActivity extends AppCompatActivity {
         editButton = findViewById(R.id.edit_button);
         logoutButton = findViewById(R.id.logout_button);
 
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> finish());
+
+
         // SharedPreferences에서 JWT 토큰 가져오기
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String jwtToken = sharedPreferences.getString("jwtToken", null);
@@ -67,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 프로필 수정 버튼 클릭 이벤트
         editButton.setOnClickListener(v -> {
-            Toast.makeText(this, "수정 기능은 아직 구현되지 않았습니다.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ProfileEditActivity.class));
         });
     }
 

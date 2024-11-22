@@ -6,6 +6,7 @@ import com.example.chairman.model.LoginResponse;
 import com.example.chairman.model.RentalRequest;
 import com.example.chairman.model.RentalResponse;
 import com.example.chairman.model.UserCreateRequest;
+import com.example.chairman.model.UserUpdateRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -44,6 +46,12 @@ public interface ApiService {
     // 사용자 정보 조회 API
     @GET("/user/info")
     Call<Map<String, String>> getUserInfo(@Header("Authorization") String authorization);
+
+    @PUT("/user/update")
+    Call<Void> updateUserInfo(@Header("Authorization") String authorization, @Body UserUpdateRequest updateRequest);
+
+    @GET("/user/institutions/{institutionCode}")
+    Call<InstitutionData> getInstitutionDetails(@Path("institutionCode") Long institutionCode);
 
     // 특정 기관의 휠체어 상태별 개수 조회
     @GET("admin/{institutionCode}/wheelchair/count")
@@ -77,9 +85,11 @@ public interface ApiService {
             @Path("rentalId") Long rentalId
     );
 
-    // 대여 취소
-    @POST("/rental/cancel")
-    Call<RentalResponse> cancelRental();
+    @POST("/rental/{institutionCode}/cancel")
+    Call<Void> cancelRental(
+            @Path("institutionCode") Long institutionCode,
+            @Header("Authorization") String authorization
+    );
 
     @POST("/rental/rent")
     Call<Void> rentWheelchair(
