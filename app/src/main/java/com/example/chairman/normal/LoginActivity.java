@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
+import com.example.chairman.admin.WaitingListActivity;
 import com.example.chairman.model.LoginRequest;
 import com.example.chairman.model.LoginResponse;
 import com.example.chairman.network.ApiClient;
@@ -147,22 +148,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-
-
     private void loginAdmin(String code) {
         apiService.adminLogin(code).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String jwtToken = response.body().getJwtToken();
+                    LoginResponse loginResponse = response.body();
+                    String jwtToken = loginResponse.getJwtToken();
+                    Long institutionCode = loginResponse.getInstitution().getInstitutionCode();
 
                     // JWT 토큰 저장
                     saveJwtToken(jwtToken);
 
-                    Toast.makeText(LoginActivity.this, "관리자 로그인 성공!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this, InstitutionListActivity.class));
-                    finish();
+                    if (institutionCode != null) {
+                        // WaitingListActivity로 institutionCode 전달
+                        Intent intent = new Intent(LoginActivity.this, WaitingListActivity.class);
+                        intent.putExtra("institutionCode", institutionCode);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "기관 코드가 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this, "로그인 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
@@ -174,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void saveJwtToken(String jwtToken) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);

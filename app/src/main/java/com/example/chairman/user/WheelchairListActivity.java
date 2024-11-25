@@ -200,10 +200,7 @@ public class WheelchairListActivity extends AppCompatActivity {
             finish();
         }
     }
-
-
-
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -213,36 +210,5 @@ public class WheelchairListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void cancelRental(Long institutionCode) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        String jwtToken = sharedPreferences.getString("jwtToken", null);
-
-        if (jwtToken == null) {
-            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        Call<Void> call = apiService.cancelRental(institutionCode, "Bearer " + jwtToken);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(WheelchairListActivity.this, "대여가 성공적으로 취소되었습니다.", Toast.LENGTH_SHORT).show();
-
-                    // 상태 초기화 등 필요하면 추가 처리
-                    finish(); // 현재 액티비티 종료
-                } else {
-                    Toast.makeText(WheelchairListActivity.this, "대여 취소에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(WheelchairListActivity.this, "서버 연결에 실패했습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 }

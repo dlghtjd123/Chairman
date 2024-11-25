@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- 공공기관 이름 -->
+    <TextView
+        android:id="@+id/textViewInstitutionName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="공공기관 이름"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 휠체어 ID -->
+    <TextView
+        android:id="@+id/textViewWheelchairId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="휠체어 ID: 123"
+        app:layout_constraintTop_toBottomOf="@id/textViewInstitutionName"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 휠체어 타입 -->
+    <TextView
+        android:id="@+id/textViewWheelchairType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="휠체어 타입: 성인용"
+        app:layout_constraintTop_toBottomOf="@id/textViewWheelchairId"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 대여 날짜 -->
+    <TextView
+        android:id="@+id/textViewRentalDates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대여일: 2024-11-22 ~ 반납일: 2024-11-29"
+        app:layout_constraintTop_toBottomOf="@id/textViewWheelchairType"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 대여인 -->
+    <TextView
+        android:id="@+id/textViewRenterName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대여인: 홍길동"
+        app:layout_constraintTop_toBottomOf="@id/textViewRentalDates"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 승인 버튼 -->
+    <Button
+        android:id="@+id/buttonApprove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="승인"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 거절 버튼 -->
+    <Button
+        android:id="@+id/buttonReject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="거절"
+        app:layout_constraintTop_toBottomOf="@id/buttonApprove"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

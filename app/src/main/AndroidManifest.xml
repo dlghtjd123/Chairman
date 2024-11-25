@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Chairman"
         tools:targetApi="31">
         <activity
+            android:name=".admin.WaitingListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.WheelchairCountActivity"
+            android:exported="false" />
+        <activity
             android:name=".user.RentalInfoActivity"
             android:exported="false" />
         <activity
