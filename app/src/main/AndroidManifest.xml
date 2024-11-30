@@ -18,7 +18,7 @@
             android:name=".admin.WaitingListActivity"
             android:exported="false" />
         <activity
-            android:name=".admin.WheelchairCountActivity"
+            android:name=".admin.WheelchairStatusActivity"
             android:exported="false" />
         <activity
             android:name=".user.RentalInfoActivity"

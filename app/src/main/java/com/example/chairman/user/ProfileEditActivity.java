@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class ProfileEditActivity extends AppCompatActivity {
 
     private EditText editTextName, editTextEmail, editTextPhone, editTextAddress;
-    private Button buttonSave, buttonCancel;
+    private Button buttonSave, buttonCancel, buttonBack;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -38,10 +38,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         editTextAddress = findViewById(R.id.editTextAddress);
         buttonSave = findViewById(R.id.buttonSave);
         buttonCancel = findViewById(R.id.buttonCancel);
+        buttonBack = findViewById(R.id.buttonBack);
 
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> finish());
-
+        // 뒤로가기 버튼 동작 설정
+        buttonBack.setOnClickListener(v -> finish());
 
         // SharedPreferences에서 JWT 토큰 가져오기
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -64,7 +64,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         // 취소 버튼 클릭 이벤트
         buttonCancel.setOnClickListener(v -> {
             Toast.makeText(this, "수정이 취소되었습니다.", Toast.LENGTH_SHORT).show();
-            finish(); // 현재 화면 닫기
+            finish();
         });
     }
 
@@ -113,7 +113,10 @@ public class ProfileEditActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ProfileEditActivity.this, "정보가 성공적으로 업데이트되었습니다.", Toast.LENGTH_SHORT).show();
-                    finish(); // 저장 후 화면 종료
+
+                    // 저장 후 최신 정보 다시 로드
+                    loadUserInfo(jwtToken);
+
                 } else {
                     Toast.makeText(ProfileEditActivity.this, "정보 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }

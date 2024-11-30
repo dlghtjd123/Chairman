@@ -1,21 +1,40 @@
 package com.example.chairman.model;
 
-public class RentalResponse {
+import com.google.gson.annotations.SerializedName;
+
+public class UserRentalResponse {
+    @SerializedName("rentalId")
     private Long rentalId;
+
+    @SerializedName("rentalCode")
     private String rentalCode;
-    private String status; // WAITING, ACTIVE, NORMAL, ACCEPTED
+
+    @SerializedName("status")
+    private String status;
+
+    @SerializedName("rentalDate")
     private String rentalDate;
+
+    @SerializedName("returnDate")
     private String returnDate;
 
-    // 휠체어 타입 추가
+    @SerializedName("wheelchairType")
     private String wheelchairType;
 
-    // 공공기관 정보 추가
+    @SerializedName("institutionName")
     private String institutionName;
+
+    @SerializedName("institutionAddress")
     private String institutionAddress;
+
+    @SerializedName("institutionPhone")
     private String institutionPhone;
 
+    @SerializedName("institutionCode")
     private Long institutionCode;
+
+    @SerializedName("userPhoneNumber") // JSON 필드 이름과 매핑
+    private String userPhoneNumber;
 
     // Getters and Setters
     public Long getRentalId() {
@@ -97,5 +116,12 @@ public class RentalResponse {
     public void setInstitutionCode(Long institutionCode) {
         this.institutionCode = institutionCode;
     }
-}
 
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
+    }
+}

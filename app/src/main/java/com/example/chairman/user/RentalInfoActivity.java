@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
-import com.example.chairman.model.RentalResponse;
+import com.example.chairman.model.UserRentalResponse;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 
@@ -66,23 +66,31 @@ public class RentalInfoActivity extends AppCompatActivity {
     private void fetchRentalDetails(String jwtToken) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
 
-        Call<RentalResponse> rentalCall = apiService.getRentalInfo("Bearer " + jwtToken);
-        rentalCall.enqueue(new Callback<RentalResponse>() {
+        Call<UserRentalResponse> rentalCall = apiService.getRentalInfo("Bearer " + jwtToken);
+        rentalCall.enqueue(new Callback<UserRentalResponse>() {
             @Override
-            public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
+            public void onResponse(Call<UserRentalResponse> call, Response<UserRentalResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    RentalResponse rental = response.body();
+                    UserRentalResponse rental = response.body();
 
                     // 대여 기간 설정
                     textViewRentalPeriod.setText(rental.getRentalDate() + " - " + rental.getReturnDate());
 
                     // 휠체어 타입 설정
-                    textViewWheelchairType.setText(rental.getWheelchairType());
+                    textViewWheelchairType.setText(rental.getWheelchairType() != null
+                            ? rental.getWheelchairType()
+                            : "정보 없음");
 
                     // 공공기관 정보 설정
-                    textViewInstitutionName.setText(rental.getInstitutionName());
-                    textViewInstitutionAddress.setText(rental.getInstitutionAddress());
-                    textViewInstitutionPhone.setText(rental.getInstitutionPhone());
+                    textViewInstitutionName.setText(rental.getInstitutionName() != null
+                            ? rental.getInstitutionName()
+                            : "정보 없음");
+                    textViewInstitutionAddress.setText(rental.getInstitutionAddress() != null
+                            ? rental.getInstitutionAddress()
+                            : "정보 없음");
+                    textViewInstitutionPhone.setText(rental.getInstitutionPhone() != null
+                            ? rental.getInstitutionPhone()
+                            : "정보 없음");
 
                     // 공공기관 코드 가져오기
                     Long institutionCode = rental.getInstitutionCode();
@@ -97,11 +105,13 @@ public class RentalInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RentalResponse> call, Throwable t) {
+            public void onFailure(Call<UserRentalResponse> call, Throwable t) {
                 Toast.makeText(RentalInfoActivity.this, "네트워크 오류 발생: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 
 
 

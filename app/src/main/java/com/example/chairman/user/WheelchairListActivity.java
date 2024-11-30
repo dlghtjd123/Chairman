@@ -5,18 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
-import com.example.chairman.model.RentalResponse;
+import com.example.chairman.model.UserRentalResponse;
+import com.example.chairman.model.WaitingRentalResponse;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 
@@ -147,17 +145,16 @@ public class WheelchairListActivity extends AppCompatActivity {
         }
 
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-        Call<RentalResponse> call = apiService.getRentalInfo("Bearer " + jwtToken);
+        Call<UserRentalResponse> call = apiService.getRentalInfo("Bearer " + jwtToken);
 
-        call.enqueue(new Callback<RentalResponse>() {
+        call.enqueue(new Callback<UserRentalResponse>() {
             @Override
-            public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
+            public void onResponse(Call<UserRentalResponse> call, Response<UserRentalResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    RentalResponse rental = response.body();
+                    UserRentalResponse rental = response.body();
 
                     // RentalInfoActivity로 이동
                     Intent intent = new Intent(WheelchairListActivity.this, RentalInfoActivity.class);
-                    intent.putExtra("institutionCode", rental.getInstitutionCode());
                     intent.putExtra("rentalStatus", rental.getStatus());
                     intent.putExtra("rentalDate", rental.getRentalDate());
                     intent.putExtra("returnDate", rental.getReturnDate());
@@ -169,7 +166,7 @@ public class WheelchairListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<RentalResponse> call, Throwable t) {
+            public void onFailure(Call<UserRentalResponse> call, Throwable t) {
                 Toast.makeText(WheelchairListActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

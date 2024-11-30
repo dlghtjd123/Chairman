@@ -2,7 +2,6 @@ package com.example.chairman.user;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chairman.R;
 import com.example.chairman.model.RentalRequest;
-import com.example.chairman.model.RentalResponse;
+import com.example.chairman.model.WaitingRentalResponse;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -91,13 +90,13 @@ public class RentalActivity extends AppCompatActivity {
 
             // 서버로 요청 전송
             ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-            Call<RentalResponse> call = apiService.rentWheelchair("Bearer " + jwtToken, institutionCode, rentalRequest);
+            Call<WaitingRentalResponse> call = apiService.rentWheelchair("Bearer " + jwtToken, institutionCode, rentalRequest);
 
-            call.enqueue(new Callback<RentalResponse>() {
+            call.enqueue(new Callback<WaitingRentalResponse>() {
                 @Override
-                public void onResponse(Call<RentalResponse> call, Response<RentalResponse> response) {
+                public void onResponse(Call<WaitingRentalResponse> call, Response<WaitingRentalResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        RentalResponse rentalResponse = response.body();
+                        WaitingRentalResponse rentalResponse = response.body();
                         Toast.makeText(RentalActivity.this,
                                 "대여 성공!\n대여 코드: " + rentalResponse.getRentalCode() +
                                         "\n상태: " + rentalResponse.getStatus(),
@@ -111,7 +110,7 @@ public class RentalActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<RentalResponse> call, Throwable t) {
+                public void onFailure(Call<WaitingRentalResponse> call, Throwable t) {
                     Toast.makeText(RentalActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });

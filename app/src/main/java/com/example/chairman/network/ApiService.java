@@ -4,15 +4,18 @@ import com.example.chairman.model.InstitutionData;
 import com.example.chairman.model.LoginRequest;
 import com.example.chairman.model.LoginResponse;
 import com.example.chairman.model.RentalRequest;
-import com.example.chairman.model.RentalResponse;
+import com.example.chairman.model.UserRentalResponse;
+import com.example.chairman.model.WaitingRentalResponse;
 import com.example.chairman.model.UserCreateRequest;
 import com.example.chairman.model.UserUpdateRequest;
+import com.example.chairman.model.WheelchairDetailResponse;
 
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -53,16 +56,23 @@ public interface ApiService {
     @GET("/user/institutions/{institutionCode}")
     Call<InstitutionData> getInstitutionDetails(@Path("institutionCode") Long institutionCode);
 
-    // 특정 기관의 휠체어 상태별 개수 조회
-    @GET("admin/{institutionCode}/wheelchair/count")
-    Call<Map<String, Integer>> getWheelchairCountsByInstitution(@Path("institutionCode") Long institutionCode);
+    // 상태별 통계 조회
+    @GET("/admin/{institutionCode}/status-count")
+    Call<Map<String, Long>> getStatusCounts(@Path("institutionCode") Long institutionCode);
 
     @GET("/admin/wheelchair/count")
     Call<Map<String, Integer>> getWheelchairCounts();
 
+    // 상태별 휠체어 세부 정보 조회
+    @GET("/admin/{institutionCode}/details")
+    Call<List<WheelchairDetailResponse>> getWheelchairDetails(
+            @Path("institutionCode") Long institutionCode,
+            @Query("status") String status
+    );
+
     //대여 요청
     @POST("/rental/{institutionCode}/rent")
-    Call<RentalResponse> rentWheelchair(
+    Call<WaitingRentalResponse> rentWheelchair(
             @Header("Authorization") String authorization,
             @Path("institutionCode") Long institutionCode,
             @Body RentalRequest rentalRequest
@@ -70,26 +80,26 @@ public interface ApiService {
 
     // 대여 정보 조회 API
     @GET("/rental/info")
-    Call<RentalResponse> getRentalInfo(@Header("Authorization") String authorization);
+    Call<UserRentalResponse> getRentalInfo(@Header("Authorization") String authorization);
 
     // 대여 목록 조회
     @GET("/rental/{institutionCode}/list")
-    Call<List<RentalResponse>> getWaitingRentals(@Path("institutionCode") Long institutionCode);
+    Call<List<WaitingRentalResponse>> getWaitingRentals(@Path("institutionCode") Long institutionCode);
 
-
-    // 대여 승인
-    @POST("/rental/{institutionCode}/approve/{rentalId}")
-    Call<RentalResponse> approveRental(
+    // 대여 요청 승인
+    @PUT("/rental/{institutionCode}/accept/{rentalId}")
+    Call<WaitingRentalResponse> approveRental(
             @Path("institutionCode") Long institutionCode,
             @Path("rentalId") Long rentalId
     );
 
-    // 대여 거절
-    @POST("/rental/{institutionCode}/reject/{rentalId}")
-    Call<RentalResponse> rejectRental(
+    // 대여 요청 거절
+    @DELETE("/rental/{institutionCode}/reject/{rentalId}")
+    Call<Void> rejectRental(
             @Path("institutionCode") Long institutionCode,
             @Path("rentalId") Long rentalId
     );
+
 
 
     @POST("/rental/{institutionCode}/cancel")
@@ -98,10 +108,4 @@ public interface ApiService {
             @Header("Authorization") String authorization
     );
 
-    @POST("/rental/rent")
-    Call<Void> rentWheelchair(
-            @Query("institutionCode") Long institutionCode,
-            @Query("wheelchairType") String wheelchairType,
-            @Query("rentalDate") String rentalDate
-    );
 }

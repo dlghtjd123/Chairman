@@ -6,25 +6,21 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <!-- 공공기관 이름 -->
+    <!-- 대여 ID -->
     <TextView
-        android:id="@+id/textViewInstitutionName"
-        android:layout_width="0dp"
+        android:id="@+id/textViewRentalId"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="공공기관 이름"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:text="대여 ID: "
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 휠체어 ID -->
     <TextView
         android:id="@+id/textViewWheelchairId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="휠체어 ID: 123"
-        app:layout_constraintTop_toBottomOf="@id/textViewInstitutionName"
+        android:text="휠체어 ID: "
+        app:layout_constraintTop_toBottomOf="@id/textViewRentalId"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 휠체어 타입 -->
@@ -32,7 +28,7 @@
         android:id="@+id/textViewWheelchairType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="휠체어 타입: 성인용"
+        android:text="휠체어 타입: "
         app:layout_constraintTop_toBottomOf="@id/textViewWheelchairId"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -41,17 +37,26 @@
         android:id="@+id/textViewRentalDates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="대여일: 2024-11-22 ~ 반납일: 2024-11-29"
+        android:text="대여일:  ~ 반납일: "
         app:layout_constraintTop_toBottomOf="@id/textViewWheelchairType"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 대여인 -->
     <TextView
-        android:id="@+id/textViewRenterName"
+        android:id="@+id/textViewuserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="대여인: 홍길동"
+        android:text="대여인: "
         app:layout_constraintTop_toBottomOf="@id/textViewRentalDates"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- 대여인 전화번호 -->
+    <TextView
+        android:id="@+id/textViewUserPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전화번호: "
+        app:layout_constraintTop_toBottomOf="@id/textViewuserName"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 승인 버튼 -->
