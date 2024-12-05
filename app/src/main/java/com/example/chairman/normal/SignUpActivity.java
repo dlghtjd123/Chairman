@@ -39,19 +39,12 @@ import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private EditText editTextName;
-    private EditText editTextPhoneNumber;
-    private EditText editTextAddress;
+    private EditText editTextEmail, editTextPassword, editTextPasswordConfirm;
+    private EditText editTextName, editTextPhoneNumber, editTextAddress;
     private TextView textViewEmailError, textViewPhoneError, textViewPasswordError, textViewPasswordConfirmError;
-    private Button btnCheckEmail;
-    private Button btnSignUp;
+    private Button btnCheckEmail; // 중복 확인 버튼 추가
+    private Button btnSignup;
     private CheckBox checkBoxTerms, checkBoxPrivacy, checkBoxThirdParty;
-    private RadioButton radioAdmin;
-    private LinearLayout userModeLayout;
-    private LinearLayout adminModeLayout;
-    private RadioGroup radioGroupMode;
     private ApiService apiService;
     private final Handler handler = new Handler();
     private Runnable emailCheckRunnable;
@@ -90,11 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
         textViewPhoneError = findViewById(R.id.textViewPhoneError);
         textViewPasswordError = findViewById(R.id.textViewPasswordError);
         textViewPasswordConfirmError = findViewById(R.id.textViewPasswordConfirmError);
-        btnSignUp = findViewById(R.id.btnSignUp);
-        radioAdmin = findViewById(R.id.radioAdmin);
-        userModeLayout = findViewById(R.id.userModeLayout);
-        adminModeLayout = findViewById(R.id.adminModeLayout);
-        radioGroupMode = findViewById(R.id.radioGroupMode);
+        btnSignup = findViewById(R.id.btnSignUp);
         checkBoxTerms = findViewById(R.id.checkBoxTerms);
         checkBoxPrivacy = findViewById(R.id.checkBoxPrivacy);
         checkBoxThirdParty = findViewById(R.id.checkBoxThirdParty);
