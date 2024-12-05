@@ -13,13 +13,17 @@ import com.example.chairman.model.WheelchairDetailResponse;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -27,6 +31,12 @@ public interface ApiService {
 
     @POST("/normal/login")
     Call<LoginResponse> userLogin(@Body LoginRequest loginRequest);
+
+    @GET("/normal/check-email")
+    Call<ResponseBody> checkEmailDuplication(@Query("email") String email);
+
+    @GET("/normal/check-email")
+    Call<ResponseBody> checkPhoneDuplication(@Query("phoneNumber") String phoneNumber);
 
     // 관리자 로그인
     @POST("/admin/login")
@@ -55,6 +65,14 @@ public interface ApiService {
 
     @GET("/user/institutions/{institutionCode}")
     Call<InstitutionData> getInstitutionDetails(@Path("institutionCode") Long institutionCode);
+
+    //프로필 사진 업로드
+    @Multipart
+    @POST("/user/profile/photo")
+    Call<Void> uploadProfilePhoto(
+            @Header("Authorization") String authorization,
+            @Part MultipartBody.Part photo
+    );
 
     // 상태별 통계 조회
     @GET("/admin/{institutionCode}/status-count")

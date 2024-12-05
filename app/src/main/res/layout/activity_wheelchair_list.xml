@@ -39,7 +39,8 @@
             android:text="성인용 대여 가능: \n0"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:backgroundTint="@null" />
+            app:backgroundTint="@null"
+            android:drawableTop="@drawable/adultwheelchair"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/child_button"
@@ -52,7 +53,8 @@
             android:text="유아용 대여 가능: \n0"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:backgroundTint="@null" />
+            app:backgroundTint="@null"
+            android:drawableTop="@drawable/childwheelchair"/>
 
         <Button
             android:id="@+id/check_rental_button"
@@ -69,16 +71,17 @@
     <!-- 프로필 버튼을 오른쪽 상단에 배치 -->
     <Button
         android:id="@+id/profile_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#FF9999"
-        android:text="Profile"
         android:textColor="#FFFFFF"
         app:layout_anchor="@+id/appBarLayout"
-        app:layout_anchorGravity="end|top" />
+        app:layout_anchorGravity="end|top"
+        android:drawableTop="@drawable/user_2"
+        android:contentDescription="@string/profile_button_desc"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

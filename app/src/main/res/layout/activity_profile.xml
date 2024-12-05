@@ -10,6 +10,17 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <!-- 프로필 사진 -->
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/user_profile"
+            android:background="@drawable/circle_border"
+            android:scaleType="centerCrop"
+            android:contentDescription="프로필 사진" />
+
         <!-- 사용자 이름 -->
         <TextView
             android:id="@+id/user_name"

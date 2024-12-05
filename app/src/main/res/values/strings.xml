@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Chairman</string>
+    <string name="profile_button_desc">프로필 수정하기 버튼</string>
 </resources>
