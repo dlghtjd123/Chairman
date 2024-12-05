@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@android:color/white">
 
     <!-- Wheelchair ID -->
     <TextView
@@ -19,17 +19,60 @@
         android:layout_height="wrap_content"
         android:text="상태: " />
 
+    <!-- Wheelchair Type -->
+    <TextView
+        android:id="@+id/textViewType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="타입: " />
+
     <!-- User Name -->
     <TextView
         android:id="@+id/textViewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="대여인: " />
+        android:text="대여인: "
+        android:visibility="gone" />
 
     <!-- User Phone -->
     <TextView
         android:id="@+id/textViewUserPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="전화번호: " />
+        android:text="전화번호: "
+        android:visibility="gone" />
+
+    <!-- Button Layout -->
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/buttonRent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="대여"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonReturn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="반납"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사용 가능"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>

@@ -63,6 +63,19 @@ public interface ApiService {
     @GET("/admin/wheelchair/count")
     Call<Map<String, Integer>> getWheelchairCounts();
 
+    @PUT("/admin/wheelchair/{wheelchairId}/status")
+    Call<Void> updateWheelchairAndRentalStatus(
+            @Path("wheelchairId") Long wheelchairId,
+            @Query("wheelchairStatus") String wheelchairStatus,
+            @Query("rentalStatus") String rentalStatus
+    );
+
+    @PUT("admin/wheelchair/{wheelchairId}/onlyStatus")
+    Call<Void> updateWheelchairStatus(
+            @Path("wheelchairId") Long wheelchairId,
+            @Query("status") String status
+    );
+
     // 상태별 휠체어 세부 정보 조회
     @GET("/admin/{institutionCode}/details")
     Call<List<WheelchairDetailResponse>> getWheelchairDetails(

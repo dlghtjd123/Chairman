@@ -27,6 +27,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView userName, userEmail, userPhone, userAddress;
     private Button editButton, logoutButton;
 
+    private static final int REQUEST_CODE_EDIT_PROFILE = 1; // 요청 코드
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> finish());
-
 
         // SharedPreferences에서 JWT 토큰 가져오기
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -71,10 +72,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 프로필 수정 버튼 클릭 이벤트
         editButton.setOnClickListener(v -> {
-            startActivity(new Intent(this, ProfileEditActivity.class));
+            Intent intent = new Intent(ProfileActivity.this, ProfileEditActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_EDIT_PROFILE); // 수정 화면으로 이동
         });
     }
 
+    // 사용자 정보 로드
     private void loadUserInfo(String jwtToken) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
         Call<Map<String, String>> call = apiService.getUserInfo("Bearer " + jwtToken);
@@ -99,5 +102,20 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.e("ProfileActivity", "API 호출 실패: " + t.getMessage());
             }
         });
+    }
+
+    // ProfileEditActivity에서 돌아올 때 결과 처리
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_EDIT_PROFILE && resultCode == RESULT_OK) {
+            // 수정된 데이터를 다시 로드
+            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            String jwtToken = sharedPreferences.getString("jwtToken", null);
+            if (jwtToken != null) {
+                loadUserInfo(jwtToken);
+            }
+        }
     }
 }

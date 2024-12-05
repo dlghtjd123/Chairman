@@ -68,7 +68,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
-    // 사용자 정보 로드
     private void loadUserInfo(String jwtToken) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
         Call<Map<String, String>> call = apiService.getUserInfo("Bearer " + jwtToken);
@@ -78,7 +77,6 @@ public class ProfileEditActivity extends AppCompatActivity {
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Map<String, String> userInfo = response.body();
-                    // EditText에 정보 설정
                     editTextName.setText(userInfo.get("name"));
                     editTextEmail.setText(userInfo.get("email"));
                     editTextPhone.setText(userInfo.get("phoneNumber"));
@@ -95,7 +93,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
     }
 
-    // 수정된 사용자 정보 저장
     private void saveUpdatedUserInfo(String jwtToken) {
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
 
@@ -114,9 +111,9 @@ public class ProfileEditActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(ProfileEditActivity.this, "정보가 성공적으로 업데이트되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    // 저장 후 최신 정보 다시 로드
-                    loadUserInfo(jwtToken);
-
+                    // 결과 전달
+                    setResult(RESULT_OK);
+                    finish();
                 } else {
                     Toast.makeText(ProfileEditActivity.this, "정보 업데이트에 실패했습니다.", Toast.LENGTH_SHORT).show();
                 }

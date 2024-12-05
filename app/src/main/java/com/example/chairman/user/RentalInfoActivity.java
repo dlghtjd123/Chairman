@@ -22,7 +22,9 @@ import retrofit2.Response;
 public class RentalInfoActivity extends AppCompatActivity {
 
     private TextView textViewRentalPeriod, textViewInstitutionName,
-            textViewInstitutionAddress, textViewInstitutionPhone, textViewWheelchairType;
+            textViewInstitutionAddress, textViewInstitutionPhone, textViewWheelchairType, textViewCurrentStatus;
+
+    private Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +37,17 @@ public class RentalInfoActivity extends AppCompatActivity {
         textViewInstitutionAddress = findViewById(R.id.textViewInstitutionAddress);
         textViewInstitutionPhone = findViewById(R.id.textViewInstitutionPhone);
         textViewWheelchairType = findViewById(R.id.textViewWheelchairType);
+        textViewCurrentStatus = findViewById(R.id.textViewCurrentStatus);
 
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> finish());
 
-        Button cancelButton = findViewById(R.id.cancel_button);
+        cancelButton = findViewById(R.id.cancel_button);
+        cancelButton.setEnabled(false); // 초기에는 비활성화
         cancelButton.setOnClickListener(v -> {
-            // Intent에서 institutionCode 가져오기
             Long institutionCode = getIntent().getLongExtra("institutionCode", -1L);
-
             if (institutionCode != -1L) {
-                cancelRental(institutionCode); // 대여 취소 요청
+                cancelRental(institutionCode);
             } else {
                 Toast.makeText(this, "기관 코드가 누락되었습니다.", Toast.LENGTH_SHORT).show();
             }
@@ -92,6 +94,29 @@ public class RentalInfoActivity extends AppCompatActivity {
                             ? rental.getInstitutionPhone()
                             : "정보 없음");
 
+                    // 대여 상태 처리
+                    String rentalStatus = rental.getStatus();
+                    String translatedStatus;
+                    switch (rentalStatus) {
+                        case "WAITING":
+                            translatedStatus = "대여 대기";
+                            cancelButton.setEnabled(false); // 대여 대기 상태에서는 취소 불가능
+                            break;
+                        case "ACCEPTED":
+                            translatedStatus = "대여 수락";
+                            cancelButton.setEnabled(true); // 대여 수락 상태에서는 취소 가능
+                            break;
+                        case "ACTIVE":
+                            translatedStatus = "대여 중";
+                            cancelButton.setEnabled(true); // 대여 중 상태에서도 취소 가능
+                            break;
+                        default:
+                            translatedStatus = "알 수 없음";
+                            cancelButton.setEnabled(false); // 알 수 없는 상태에서는 취소 불가능
+                            break;
+                    }
+                    textViewCurrentStatus.setText(translatedStatus);
+
                     // 공공기관 코드 가져오기
                     Long institutionCode = rental.getInstitutionCode();
                     Log.d("RentalInfoActivity", "Institution Code: " + institutionCode);
@@ -110,10 +135,6 @@ public class RentalInfoActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-
 
     private void cancelRental(Long institutionCode) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -151,7 +172,4 @@ public class RentalInfoActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }

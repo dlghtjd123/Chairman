@@ -155,19 +155,23 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     String jwtToken = loginResponse.getJwtToken();
-                    Long institutionCode = loginResponse.getInstitution().getInstitutionCode();
+                    LoginResponse.Institution institution = loginResponse.getInstitution(); // Institution 객체 가져오기
 
-                    // JWT 토큰 저장
-                    saveJwtToken(jwtToken);
+                    if (institution != null) {
+                        Long institutionCode = institution.getInstitutionCode();
+                        String institutionName = institution.getname();
 
-                    if (institutionCode != null) {
-                        // WaitingListActivity로 institutionCode 전달
+                        // JWT 토큰 저장
+                        saveJwtToken(jwtToken);
+
+                        // WaitingListActivity로 institutionCode와 name 전달
                         Intent intent = new Intent(LoginActivity.this, WaitingListActivity.class);
                         intent.putExtra("institutionCode", institutionCode);
+                        intent.putExtra("institutionName", institutionName);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "기관 코드가 없습니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "기관 정보가 없습니다.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "로그인 실패: " + response.message(), Toast.LENGTH_SHORT).show();
@@ -180,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     private void saveJwtToken(String jwtToken) {

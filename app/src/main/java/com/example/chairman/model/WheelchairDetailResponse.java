@@ -10,6 +10,9 @@ public class WheelchairDetailResponse {
     @SerializedName("status")
     private String status;
 
+    @SerializedName("type")
+    private String type;
+
     @SerializedName("userName")
     private String userName;
 
@@ -32,6 +35,10 @@ public class WheelchairDetailResponse {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 
     public String getUserName() {
         return userName;
