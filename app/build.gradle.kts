@@ -49,4 +49,7 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation(kotlin("script-runtime"))
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 }

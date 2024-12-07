@@ -179,7 +179,6 @@
                     android:layout_height="wrap_content"
                     android:text="중복 확인"
                     android:backgroundTint="#000000"
-
                     android:layout_marginTop="4dp" />
 
                 <!-- 주소 입력 -->

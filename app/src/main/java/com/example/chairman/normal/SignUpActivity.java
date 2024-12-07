@@ -42,7 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword, editTextPasswordConfirm;
     private EditText editTextName, editTextPhoneNumber, editTextAddress;
     private TextView textViewEmailError, textViewPhoneError, textViewPasswordError, textViewPasswordConfirmError;
-    private Button btnCheckEmail; // 중복 확인 버튼 추가
+    private Button btnCheckEmail, btnCheckPhone; // 중복 확인 버튼 추가
     private Button btnSignup;
     private CheckBox checkBoxTerms, checkBoxPrivacy, checkBoxThirdParty;
     private ApiService apiService;
@@ -78,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
         editTextPasswordConfirm = findViewById(R.id.editTextConfirmPassword);
         editTextName = findViewById(R.id.editTextName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        btnCheckPhone = findViewById(R.id.btnCheckPhone);
         editTextAddress = findViewById(R.id.editTextAddress);
         textViewEmailError = findViewById(R.id.textViewEmailError);
         textViewPhoneError = findViewById(R.id.textViewPhoneError);
@@ -113,26 +114,28 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    // 전화번호 중복확인 버튼 클릭 이벤트 처리
     private void setupPhoneValidation() {
-        editTextPhoneNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        btnCheckPhone.setOnClickListener(v -> {
+            String phoneNumber = editTextPhoneNumber.getText().toString().trim();
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String phoneNumber = s.toString().trim();
-                if (!phoneNumber.matches("\\d{3}-\\d{4}-\\d{4}")) {
-                    textViewPhoneError.setText("전화번호 형식이 잘못되었습니다. 예: 010-0000-0000");
-                    textViewPhoneError.setVisibility(View.VISIBLE);
-                }
-                else {
-                    textViewPhoneError.setVisibility(View.GONE);
-                    checkPhoneNumberDuplication(phoneNumber);
-                }
+            if (TextUtils.isEmpty(phoneNumber)) {
+                // 전화번호가 비어있을 때 오류 표시
+                textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                textViewPhoneError.setText("전화번호를 입력하세요.");
+                textViewPhoneError.setVisibility(View.VISIBLE);
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
+            else if (!phoneNumber.matches("\\d{3}-\\d{4}-\\d{4}")) {
+                // 전화번호 형식이 올바르지 않을 때 오류 표시
+                textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                textViewPhoneError.setText("유효한 전화번호를 입력하세요.");
+                textViewPhoneError.setVisibility(View.VISIBLE);
+            }
+            else {
+                // 전화번호 형식이 올바르면 중복 검사 호출
+                textViewPhoneError.setVisibility(View.GONE);
+                checkPhoneNumberDuplication(phoneNumber);
+            }
         });
     }
 
@@ -311,27 +314,33 @@ public class SignUpActivity extends AppCompatActivity {
 
     // 전화번호 중복 검사 호출
     public void checkPhoneNumberDuplication(String phoneNumber) {
-        ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-
         apiService.checkPhoneDuplication(phoneNumber).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     // 사용 가능한 전화번호
-                    Toast.makeText(getApplicationContext(), "사용 가능한 전화번호입니다.", Toast.LENGTH_SHORT).show();
+                    textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_green_dark)); // 초록색
+                    textViewPhoneError.setText("사용 가능한 전화번호입니다.");
+                    textViewPhoneError.setVisibility(View.VISIBLE);
                 } else if (response.code() == 409) {
                     // 이미 존재하는 전화번호
-                    Toast.makeText(getApplicationContext(), "이미 존재하는 전화번호입니다.", Toast.LENGTH_SHORT).show();
+                    textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark)); // 빨간색
+                    textViewPhoneError.setText("이미 존재하는 전화번호입니다.");
+                    textViewPhoneError.setVisibility(View.VISIBLE);
                 } else {
                     // 기타 오류
-                    Toast.makeText(getApplicationContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark)); // 빨간색
+                    textViewPhoneError.setText("오류가 발생했습니다.");
+                    textViewPhoneError.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 // 네트워크 오류 처리
-                Toast.makeText(getApplicationContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark)); // 빨간색
+                textViewPhoneError.setText("네트워크 오류가 발생했습니다.");
+                textViewPhoneError.setVisibility(View.VISIBLE);
             }
         });
     }

@@ -7,8 +7,11 @@ public class WheelchairDetailResponse {
     @SerializedName("wheelchairId")
     private Long wheelchairId;
 
-    @SerializedName("status")
-    private String status;
+    @SerializedName("wheelchairStatus") // 수정: 서버와 동일한 필드 이름
+    private String wheelchairStatus;
+
+    @SerializedName("rentalStatus")
+    private String rentalStatus;
 
     @SerializedName("type")
     private String type;
@@ -28,17 +31,29 @@ public class WheelchairDetailResponse {
         this.wheelchairId = wheelchairId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getWheelchairStatus() {
+        return wheelchairStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setWheelchairStatus(String wheelchairStatus) {
+        this.wheelchairStatus = wheelchairStatus;
     }
 
-    public String getType() { return type; }
+    public String getRentalStatus() {
+        return rentalStatus;
+    }
 
-    public void setType(String type) { this.type = type; }
+    public void setRentalStatus(String rentalStatus) {
+        this.rentalStatus = rentalStatus;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getUserName() {
         return userName;

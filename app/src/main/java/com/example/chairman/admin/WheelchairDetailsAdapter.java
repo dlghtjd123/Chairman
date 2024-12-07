@@ -1,6 +1,7 @@
 package com.example.chairman.admin;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,17 +41,20 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WheelchairDetailResponse wheelchair = wheelchairList.get(holder.getAdapterPosition());
+        WheelchairDetailResponse wheelchair = wheelchairList.get(position);
 
-        // 항목 데이터 설정
+        // 로그 추가: 데이터 상태 확인
+        Log.d("Adapter", "Position: " + position + ", Wheelchair: " + wheelchair);
+
+        // 기본 텍스트 설정
         holder.textViewWheelchairId.setText("ID: " + wheelchair.getWheelchairId());
-        holder.textViewStatus.setText("상태: " + wheelchair.getStatus());
-        holder.textViewType.setText("타입: " + ("ADULT".equalsIgnoreCase(wheelchair.getType()) ? "성인용" : "유아용"));
+        holder.textViewStatus.setText("휠체어 상태: " + wheelchair.getWheelchairStatus() + "\n대여 상태: " + wheelchair.getRentalStatus());
+        holder.textViewType.setText("타입: " + wheelchair.getType());
 
         // 대여자 정보 표시
-        if ("RENTED".equalsIgnoreCase(wheelchair.getStatus()) ||
-                "WAITING".equalsIgnoreCase(wheelchair.getStatus()) ||
-                "ACCEPTED".equalsIgnoreCase(wheelchair.getStatus())) {
+        if ("RENTED".equalsIgnoreCase(wheelchair.getWheelchairStatus()) ||
+                "WAITING".equalsIgnoreCase(wheelchair.getWheelchairStatus()) ||
+                "ACCEPTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
             holder.textViewUserName.setVisibility(View.VISIBLE);
             holder.textViewUserPhone.setVisibility(View.VISIBLE);
             holder.textViewUserName.setText("대여인: " + (wheelchair.getUserName() != null ? wheelchair.getUserName() : "정보 없음"));
@@ -60,20 +64,20 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
             holder.textViewUserPhone.setVisibility(View.GONE);
         }
 
-        // 선택된 항목에 따라 배경색 및 버튼 가시성 설정
-        if (selectedPosition == holder.getAdapterPosition()) {
+        // 버튼 레이아웃 가시성 제어
+        if (selectedPosition == position) {
             holder.itemView.setBackgroundColor(Color.LTGRAY);
             holder.buttonLayout.setVisibility(View.VISIBLE);
 
             // 상태에 따라 버튼 가시성 설정
-            if ("ACCEPTED".equalsIgnoreCase(wheelchair.getStatus())) {
-                holder.buttonRent.setVisibility(View.VISIBLE);   // 수락 버튼 활성화
-                holder.buttonReturn.setVisibility(View.GONE);    // 반납 버튼 숨기기
+            if ("ACCEPTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
+                holder.buttonReturn.setVisibility(View.GONE);   // 반납 버튼 숨기기
                 holder.buttonAvailable.setVisibility(View.GONE); // 사용 가능 버튼 숨기기
-            } else if ("RENTED".equalsIgnoreCase(wheelchair.getStatus())) {
+                holder.buttonRent.setVisibility(View.VISIBLE); // 수락 버튼 활성화
+            } else if ("RENTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
                 holder.buttonReturn.setVisibility(View.VISIBLE); // 반납 버튼 활성화
                 holder.buttonAvailable.setVisibility(View.GONE); // 사용 가능 버튼 숨기기
-                holder.buttonRent.setVisibility(View.GONE);      // 수락 버튼 숨기기
+                holder.buttonRent.setVisibility(View.GONE);     // 수락 버튼 숨기기
             } else {
                 holder.buttonReturn.setVisibility(View.GONE);
                 holder.buttonAvailable.setVisibility(View.GONE);
@@ -84,14 +88,10 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
             holder.buttonLayout.setVisibility(View.GONE);
         }
 
-        // 항목 클릭 이벤트
+        // 항목 클릭 이벤트 처리
         holder.itemView.setOnClickListener(v -> {
-            if (selectedPosition == holder.getAdapterPosition()) {
-                selectedPosition = -1; // 선택 해제
-            } else {
-                selectedPosition = holder.getAdapterPosition(); // 선택 변경
-            }
-            notifyDataSetChanged(); // RecyclerView 갱신
+            selectedPosition = (selectedPosition == position) ? -1 : position; // 선택 토글
+            notifyDataSetChanged();
         });
 
         // 버튼 클릭 이벤트
@@ -99,6 +99,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
         holder.buttonReturn.setOnClickListener(v -> actionListener.onReturn(wheelchair)); // 반납 버튼 동작 정의
         holder.buttonAvailable.setOnClickListener(v -> actionListener.onAvailable(wheelchair)); // 사용 가능 버튼 동작 정의
     }
+
 
     @Override
     public int getItemCount() {
@@ -108,7 +109,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewWheelchairId, textViewStatus, textViewType, textViewUserName, textViewUserPhone;
         LinearLayout buttonLayout;
-        Button  buttonRent, buttonReturn, buttonAvailable;
+        Button buttonRent, buttonReturn, buttonAvailable;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.chairman.R;
 import com.example.chairman.network.ApiClient;
 import com.example.chairman.network.ApiService;
@@ -25,6 +27,7 @@ import retrofit2.Response;
 public class ProfileActivity extends AppCompatActivity {
 
     private TextView userName, userEmail, userPhone, userAddress;
+    private ImageView profileImageView; // 프로필 사진 추가
     private Button editButton, logoutButton;
 
     private static final int REQUEST_CODE_EDIT_PROFILE = 1; // 요청 코드
@@ -36,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile); // XML 레이아웃 연결
 
         // UI 요소 초기화
+        profileImageView = findViewById(R.id.profile_image); // 프로필 사진 ImageView
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
         userPhone = findViewById(R.id.user_phone);
@@ -91,6 +95,16 @@ public class ProfileActivity extends AppCompatActivity {
                     userEmail.setText("이메일: " + userInfo.get("email"));
                     userPhone.setText("전화번호: " + userInfo.get("phoneNumber"));
                     userAddress.setText("주소: " + userInfo.get("address"));
+
+                    // 프로필 이미지 로드 (Glide 사용)
+                    String profileImageUrl = userInfo.get("profileImageUrl");
+                    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                        Glide.with(ProfileActivity.this)
+                                .load(profileImageUrl)
+                                .placeholder(R.drawable.user_profile) // 기본 이미지
+                                .error(R.drawable.user_profile) // 오류 시 기본 이미지
+                                .into(profileImageView);
+                    }
                 } else {
                     Toast.makeText(ProfileActivity.this, "사용자 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
                 }

@@ -35,7 +35,7 @@ public interface ApiService {
     @GET("/normal/check-email")
     Call<ResponseBody> checkEmailDuplication(@Query("email") String email);
 
-    @GET("/normal/check-email")
+    @GET("/normal/check-phone")
     Call<ResponseBody> checkPhoneDuplication(@Query("phoneNumber") String phoneNumber);
 
     // 관리자 로그인

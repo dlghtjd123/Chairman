@@ -38,17 +38,10 @@ public class WheelchairStatusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_wheelchair_status);
 
         // View 초기화
-        buttonAvailable = findViewById(R.id.buttonAvailable);
-        buttonRented = findViewById(R.id.buttonRented);
-        buttonBroken = findViewById(R.id.buttonBroken);
-        buttonWaiting = findViewById(R.id.buttonWaiting);
-        buttonTotal = findViewById(R.id.buttonTotal);
-        buttonAccepted = findViewById(R.id.buttonAccepted);
-        recyclerViewDetails = findViewById(R.id.recyclerViewWheelchairDetails);
+        initializeViews();
 
-        // RecyclerView에 LayoutManager 설정
+        // RecyclerView 초기화
         recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
-
         wheelchairDetailsAdapter = new WheelchairDetailsAdapter(wheelchairDetailsList, new WheelchairDetailsAdapter.OnActionListener() {
             @Override
             public void onRent(WheelchairDetailResponse wheelchair) {
@@ -62,16 +55,12 @@ public class WheelchairStatusActivity extends AppCompatActivity {
 
             @Override
             public void onAvailable(WheelchairDetailResponse wheelchair) {
-                updateWheelchairStatus(wheelchair.getWheelchairId(), "AVAILABLE"); // 파손 -> 사용 가능
+                updateWheelchairStatus(wheelchair.getWheelchairId(), "AVAILABLE");
             }
         });
-
         recyclerViewDetails.setAdapter(wheelchairDetailsAdapter);
 
-        // API 클라이언트 초기화
-        apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
-
-        // 전달받은 institutionCode 가져오기
+        // Institution Code 확인
         institutionCode = getIntent().getLongExtra("institutionCode", -1);
         if (institutionCode == -1) {
             Toast.makeText(this, "기관 코드가 필요합니다.", Toast.LENGTH_SHORT).show();
@@ -79,16 +68,32 @@ public class WheelchairStatusActivity extends AppCompatActivity {
             return;
         }
 
-        // 상태별 개수 갱신
+        // 초기 데이터 로드
         fetchStatusCounts();
+        fetchWheelchairDetails();
 
-        // 버튼 클릭 리스너 설정
+        // 상태 버튼 클릭 이벤트 설정
         buttonTotal.setOnClickListener(v -> onStatusButtonClick("ALL", buttonTotal));
         buttonAvailable.setOnClickListener(v -> onStatusButtonClick("AVAILABLE", buttonAvailable));
         buttonRented.setOnClickListener(v -> onStatusButtonClick("RENTED", buttonRented));
         buttonBroken.setOnClickListener(v -> onStatusButtonClick("BROKEN", buttonBroken));
         buttonWaiting.setOnClickListener(v -> onStatusButtonClick("WAITING", buttonWaiting));
         buttonAccepted.setOnClickListener(v -> onStatusButtonClick("ACCEPTED", buttonAccepted));
+    }
+
+    // View 초기화 메서드
+    private void initializeViews() {
+        // XML 레이아웃에 정의된 버튼 및 RecyclerView를 초기화
+        buttonTotal = findViewById(R.id.buttonTotal);
+        buttonAvailable = findViewById(R.id.buttonAvailable);
+        buttonRented = findViewById(R.id.buttonRented);
+        buttonBroken = findViewById(R.id.buttonBroken);
+        buttonWaiting = findViewById(R.id.buttonWaiting);
+        buttonAccepted = findViewById(R.id.buttonAccepted);
+        recyclerViewDetails = findViewById(R.id.recyclerViewWheelchairDetails);
+
+        // API 클라이언트 초기화
+        apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
     }
 
     private void onStatusButtonClick(String status, Button selectedButton) {
@@ -140,7 +145,7 @@ public class WheelchairStatusActivity extends AppCompatActivity {
                     List<WheelchairDetailResponse> details = response.body();
                     wheelchairDetailsList.clear();
                     wheelchairDetailsList.addAll(details);
-                    wheelchairDetailsAdapter.notifyDataSetChanged();
+                    wheelchairDetailsAdapter.notifyDataSetChanged(); // 데이터 갱신
                     Log.d("WheelchairStatus", "Fetched details: " + details.size());
                 } else {
                     Toast.makeText(WheelchairStatusActivity.this, "세부 정보를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show();
@@ -155,76 +160,42 @@ public class WheelchairStatusActivity extends AppCompatActivity {
         });
     }
 
+
     private void updateWheelchairStatusAndRentalStatus(Long wheelchairId, String wheelchairStatus, String rentalStatus) {
-        // UI 업데이트
-        for (WheelchairDetailResponse wheelchair : wheelchairDetailsList) {
-            if (wheelchair.getWheelchairId().equals(wheelchairId)) {
-                wheelchair.setStatus(wheelchairStatus);
-                break;
-            }
-        }
-        wheelchairDetailsAdapter.notifyDataSetChanged();
-
-        // 로그 추가
-        Log.d("WheelchairStatus", "Requesting status update for wheelchairId: " + wheelchairId + ", wheelchairStatus: " + wheelchairStatus + ", rentalStatus: " + rentalStatus);
-
-        // API 호출
         apiService.updateWheelchairAndRentalStatus(wheelchairId, wheelchairStatus, rentalStatus).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(WheelchairStatusActivity.this, "상태가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    fetchStatusCounts(); // 상태별 개수 갱신
-                    fetchWheelchairDetails(); // 세부 목록 갱신
-                    Log.d("WheelchairStatus", "Status updated successfully");  // 로그 추가
+                    Toast.makeText(WheelchairStatusActivity.this, "상태가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                    fetchWheelchairDetails();
                 } else {
                     Toast.makeText(WheelchairStatusActivity.this, "상태 변경 실패: " + response.message(), Toast.LENGTH_SHORT).show();
-                    Log.d("WheelchairStatus", "Failed to update status: " + response.message());  // 로그 추가
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(WheelchairStatusActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("WheelchairStatus", "Error updating status: " + t.getMessage(), t);  // 로그 추가
             }
         });
     }
 
-    private void updateWheelchairStatus(Long wheelchairId, String status) {
-        // UI 업데이트
-        for (WheelchairDetailResponse wheelchair : wheelchairDetailsList) {
-            if (wheelchair.getWheelchairId().equals(wheelchairId)) {
-                wheelchair.setStatus(status);
-                break;
-            }
-        }
-        wheelchairDetailsAdapter.notifyDataSetChanged();
-
-        // 로그 추가
-        Log.d("WheelchairStatus", "Requesting status update for wheelchairId: " + wheelchairId + ", status: " + status);
-
-        // API 호출
-        apiService.updateWheelchairStatus(wheelchairId, status).enqueue(new Callback<Void>() {
+    private void updateWheelchairStatus(Long wheelchairId, String wheelchairStatus) {
+        apiService.updateWheelchairStatus(wheelchairId, wheelchairStatus).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(WheelchairStatusActivity.this, "상태가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    fetchStatusCounts();
+                    Toast.makeText(WheelchairStatusActivity.this, "휠체어 상태가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                     fetchWheelchairDetails();
-                    Log.d("WheelchairStatus", "Status updated successfully");  // 로그 추가
                 } else {
                     Toast.makeText(WheelchairStatusActivity.this, "상태 변경 실패: " + response.message(), Toast.LENGTH_SHORT).show();
-                    Log.d("WheelchairStatus", "Failed to update status: " + response.message());  // 로그 추가
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(WheelchairStatusActivity.this, "네트워크 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("WheelchairStatus", "Error updating status: " + t.getMessage(), t);  // 로그 추가
             }
         });
     }
-
 }
