@@ -167,7 +167,8 @@ public class WheelchairStatusActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(WheelchairStatusActivity.this, "상태가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    fetchWheelchairDetails();
+                    fetchStatusCounts(); // 상태 버튼 업데이트
+                    fetchWheelchairDetails(); // RecyclerView 데이터 갱신
                 } else {
                     Toast.makeText(WheelchairStatusActivity.this, "상태 변경 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
@@ -179,14 +180,17 @@ public class WheelchairStatusActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void updateWheelchairStatus(Long wheelchairId, String wheelchairStatus) {
         apiService.updateWheelchairStatus(wheelchairId, wheelchairStatus).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(WheelchairStatusActivity.this, "휠체어 상태가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    fetchWheelchairDetails();
+                    Toast.makeText(WheelchairStatusActivity.this, "휠체어가 " + wheelchairStatus + " 상태로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                    fetchStatusCounts(); // 상태 버튼 업데이트
+                    fetchWheelchairDetails(); // RecyclerView 데이터 갱신
                 } else {
                     Toast.makeText(WheelchairStatusActivity.this, "상태 변경 실패: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
@@ -198,4 +202,5 @@ public class WheelchairStatusActivity extends AppCompatActivity {
             }
         });
     }
+
 }

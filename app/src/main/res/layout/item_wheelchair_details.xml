@@ -26,6 +26,14 @@
         android:layout_height="wrap_content"
         android:text="타입: " />
 
+    <!-- Rental Status -->
+    <TextView
+        android:id="@+id/textViewRentalStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대여 상태: "
+        android:visibility="gone" />
+
     <!-- User Name -->
     <TextView
         android:id="@+id/textViewUserName"

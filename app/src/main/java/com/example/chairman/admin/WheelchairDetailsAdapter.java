@@ -48,20 +48,26 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
 
         // 기본 텍스트 설정
         holder.textViewWheelchairId.setText("ID: " + wheelchair.getWheelchairId());
-        holder.textViewStatus.setText("휠체어 상태: " + wheelchair.getWheelchairStatus() + "\n대여 상태: " + wheelchair.getRentalStatus());
+        holder.textViewStatus.setText("휠체어 상태: " + wheelchair.getWheelchairStatus());
         holder.textViewType.setText("타입: " + wheelchair.getType());
 
-        // 대여자 정보 표시
-        if ("RENTED".equalsIgnoreCase(wheelchair.getWheelchairStatus()) ||
-                "WAITING".equalsIgnoreCase(wheelchair.getWheelchairStatus()) ||
-                "ACCEPTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
-            holder.textViewUserName.setVisibility(View.VISIBLE);
-            holder.textViewUserPhone.setVisibility(View.VISIBLE);
-            holder.textViewUserName.setText("대여인: " + (wheelchair.getUserName() != null ? wheelchair.getUserName() : "정보 없음"));
-            holder.textViewUserPhone.setText("전화번호: " + (wheelchair.getUserPhone() != null ? wheelchair.getUserPhone() : "정보 없음"));
-        } else {
+        // 대여 정보 숨기기 또는 표시하기
+        boolean shouldHideRentalInfo = "BROKEN".equalsIgnoreCase(wheelchair.getWheelchairStatus()) ||
+                "AVAILABLE".equalsIgnoreCase(wheelchair.getWheelchairStatus());
+
+        if (shouldHideRentalInfo) {
+            // 대여 정보 숨기기
+            holder.textViewRentalStatus.setVisibility(View.GONE);
             holder.textViewUserName.setVisibility(View.GONE);
             holder.textViewUserPhone.setVisibility(View.GONE);
+        } else {
+            // 대여 정보 표시
+            holder.textViewRentalStatus.setVisibility(View.VISIBLE);
+            holder.textViewRentalStatus.setText("대여 상태: " + (wheelchair.getRentalStatus() != null ? wheelchair.getRentalStatus() : "ERROR"));
+            holder.textViewUserName.setVisibility(View.VISIBLE);
+            holder.textViewUserName.setText("대여인: " + (wheelchair.getUserName() != null ? wheelchair.getUserName() : "정보 없음"));
+            holder.textViewUserPhone.setVisibility(View.VISIBLE);
+            holder.textViewUserPhone.setText("전화번호: " + (wheelchair.getUserPhone() != null ? wheelchair.getUserPhone() : "정보 없음"));
         }
 
         // 버튼 레이아웃 가시성 제어
@@ -69,19 +75,28 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
             holder.itemView.setBackgroundColor(Color.LTGRAY);
             holder.buttonLayout.setVisibility(View.VISIBLE);
 
-            // 상태에 따라 버튼 가시성 설정
-            if ("ACCEPTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
-                holder.buttonReturn.setVisibility(View.GONE);   // 반납 버튼 숨기기
-                holder.buttonAvailable.setVisibility(View.GONE); // 사용 가능 버튼 숨기기
-                holder.buttonRent.setVisibility(View.VISIBLE); // 수락 버튼 활성화
-            } else if ("RENTED".equalsIgnoreCase(wheelchair.getWheelchairStatus())) {
-                holder.buttonReturn.setVisibility(View.VISIBLE); // 반납 버튼 활성화
-                holder.buttonAvailable.setVisibility(View.GONE); // 사용 가능 버튼 숨기기
-                holder.buttonRent.setVisibility(View.GONE);     // 수락 버튼 숨기기
-            } else {
-                holder.buttonReturn.setVisibility(View.GONE);
-                holder.buttonAvailable.setVisibility(View.GONE);
-                holder.buttonRent.setVisibility(View.GONE);
+            // 상태에 따른 버튼 가시성 설정
+            switch (wheelchair.getWheelchairStatus().toUpperCase()) {
+                case "ACCEPTED":
+                    holder.buttonRent.setVisibility(View.VISIBLE);
+                    holder.buttonReturn.setVisibility(View.GONE);
+                    holder.buttonAvailable.setVisibility(View.GONE);
+                    break;
+                case "RENTED":
+                    holder.buttonRent.setVisibility(View.GONE);
+                    holder.buttonReturn.setVisibility(View.VISIBLE);
+                    holder.buttonAvailable.setVisibility(View.GONE);
+                    break;
+                case "BROKEN":
+                    holder.buttonRent.setVisibility(View.GONE);
+                    holder.buttonReturn.setVisibility(View.GONE);
+                    holder.buttonAvailable.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    holder.buttonRent.setVisibility(View.GONE);
+                    holder.buttonReturn.setVisibility(View.GONE);
+                    holder.buttonAvailable.setVisibility(View.GONE);
+                    break;
             }
         } else {
             holder.itemView.setBackgroundColor(Color.WHITE);
@@ -101,13 +116,15 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
     }
 
 
+
+
     @Override
     public int getItemCount() {
         return wheelchairList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewWheelchairId, textViewStatus, textViewType, textViewUserName, textViewUserPhone;
+        TextView textViewWheelchairId, textViewStatus, textViewType, textViewRentalStatus, textViewUserName, textViewUserPhone;
         LinearLayout buttonLayout;
         Button buttonRent, buttonReturn, buttonAvailable;
 
@@ -116,6 +133,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
             textViewWheelchairId = itemView.findViewById(R.id.textViewWheelchairId);
             textViewStatus = itemView.findViewById(R.id.textViewStatus);
             textViewType = itemView.findViewById(R.id.textViewType);
+            textViewRentalStatus = itemView.findViewById(R.id.textViewRentalStatus);
             textViewUserName = itemView.findViewById(R.id.textViewUserName);
             textViewUserPhone = itemView.findViewById(R.id.textViewUserPhone);
             buttonLayout = itemView.findViewById(R.id.buttonLayout);

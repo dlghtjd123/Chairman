@@ -131,8 +131,6 @@ public interface ApiService {
             @Path("rentalId") Long rentalId
     );
 
-
-
     @POST("/rental/{institutionCode}/cancel")
     Call<Void> cancelRental(
             @Path("institutionCode") Long institutionCode,
