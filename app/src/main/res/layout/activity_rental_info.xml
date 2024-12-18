@@ -137,7 +137,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 로그아웃 버튼 -->
+    <!-- 대여 취소 버튼 -->
     <Button
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"

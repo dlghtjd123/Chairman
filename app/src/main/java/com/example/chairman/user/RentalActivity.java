@@ -166,25 +166,31 @@ public class RentalActivity extends AppCompatActivity {
             timePicker.show(getSupportFragmentManager(), "MATERIAL_TIME_PICKER");
         }, year, month, day);
 
-        // 최소 날짜 설정
+        // 대여일 선택 시: 오늘 이후 날짜만 선택 가능
         if (isRentDate) {
             datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         } else {
+            // 반납일 선택 시: 대여일 이후로만 설정 가능하며 최대 2주까지
             if (selectedRentDate != null) {
                 Calendar rentDate = Calendar.getInstance();
                 String[] rentDateParts = selectedRentDate.split("T")[0].split("-");
                 rentDate.set(Calendar.YEAR, Integer.parseInt(rentDateParts[0]));
                 rentDate.set(Calendar.MONTH, Integer.parseInt(rentDateParts[1]) - 1);
                 rentDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(rentDateParts[2]));
+
+                // 반납일 최소 날짜: 대여일 다음날
+                rentDate.add(Calendar.DAY_OF_MONTH, 1);
                 datePickerDialog.getDatePicker().setMinDate(rentDate.getTimeInMillis());
+
+                // 반납일 최대 날짜: 대여일 기준 최대 2주까지
+                rentDate.add(Calendar.WEEK_OF_YEAR, 2);
+                datePickerDialog.getDatePicker().setMaxDate(rentDate.getTimeInMillis());
             }
         }
 
-        // 최대 날짜 설정 (2주 후)
-        calendar.add(Calendar.WEEK_OF_YEAR, 2);
-        datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
+
 
     /**
      * 날짜와 시간을 "yyyy-MM-dd'T'HH:mm:ss" 형식으로 포맷팅

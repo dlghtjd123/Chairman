@@ -84,6 +84,10 @@ public class WheelchairListActivity extends AppCompatActivity {
      * @param institutionCode 공공기관 코드
      */
     private void fetchAvailableCounts(Long institutionCode) {
+        // 버튼 초기화 (데이터 로드 전 상태)
+        adultButton.setText("성인용 대여 가능: 로딩 중...");
+        childButton.setText("유아용 대여 가능: 로딩 중...");
+
         ApiService apiService = ApiClient.getRetrofitInstance().create(ApiService.class);
         Call<Map<String, Integer>> call = apiService.getAvailableWheelchairCounts(institutionCode);
 
@@ -93,23 +97,33 @@ public class WheelchairListActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Map<String, Integer> counts = response.body();
 
+                    // 대여 가능한 휠체어 개수 가져오기
+                    int adultCount = counts.getOrDefault("ADULT", 0);
+                    int childCount = counts.getOrDefault("CHILD", 0);
+
                     // 버튼 텍스트 업데이트
-                    adultButton.setText("성인용 대여 가능:\n" + counts.getOrDefault("ADULT", 0));
-                    childButton.setText("유아용 대여 가능:\n" + counts.getOrDefault("CHILD", 0));
+                    adultButton.setText(String.format("성인용 대여 가능: %d대", adultCount));
+                    childButton.setText(String.format("유아용 대여 가능: %d대", childCount));
                 } else {
+                    // 오류 처리
                     Toast.makeText(WheelchairListActivity.this, "데이터를 가져오지 못했습니다.", Toast.LENGTH_SHORT).show();
-                    Log.e("WheelchairListActivity", "Response error: " + response.code());
+                    adultButton.setText("성인용 대여 가능: 0대");
+                    childButton.setText("유아용 대여 가능: 0대");
                 }
             }
 
             @Override
             public void onFailure(Call<Map<String, Integer>> call, Throwable t) {
-                t.printStackTrace();
+                // 네트워크 오류 처리
                 Toast.makeText(WheelchairListActivity.this, "서버 통신 오류 발생", Toast.LENGTH_SHORT).show();
-                Log.e("WheelchairListActivity", "API call failed", t);
+                adultButton.setText("성인용 대여 가능: 0대");
+                childButton.setText("유아용 대여 가능: 0대");
             }
         });
     }
+
+
+
 
     public void openProfileActivity() {
         Intent intent = new Intent(this, ProfileActivity.class); // ProfileActivity로 이동

@@ -136,5 +136,4 @@ public interface ApiService {
             @Path("institutionCode") Long institutionCode,
             @Header("Authorization") String authorization
     );
-
 }
