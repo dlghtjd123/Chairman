@@ -211,7 +211,7 @@ public class WheelchairListActivity extends AppCompatActivity {
             finish();
         }
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

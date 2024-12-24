@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity {
         //회원가입 버튼 클릭 이벤트
         btnSignup.setOnClickListener(v -> signUpUser());
     }
-    
+
     private void initUI() {
 
         editTextEmail = findViewById(R.id.editTextEmail);
@@ -128,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
             else if (!phoneNumber.matches("\\d{3}-\\d{4}-\\d{4}")) {
                 // 전화번호 형식이 올바르지 않을 때 오류 표시
                 textViewPhoneError.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-                textViewPhoneError.setText("유효한 전화번호를 입력하세요.");
+                textViewPhoneError.setText("010-0000-0000 형식으로 입력해주세요.");
                 textViewPhoneError.setVisibility(View.VISIBLE);
             }
             else {

@@ -10,4 +10,9 @@
     <color name="default_item_background">#FFFFFF</color> <!-- 기본 항목 배경색 (White) -->
     <color name="button_rent">#4CAF50</color> <!-- 대여 버튼 색상 (Green) -->
     <color name="button_return">#F44336</color> <!-- 반납 버튼 색상 (Red) -->
+
+    <color name="primaryColor">#4CAF50</color> <!-- 녹색 -->
+    <color name="secondaryColor">#FF9800</color> <!-- 주황색 -->
+    <color name="accentColor">#2196F3</color> <!-- 파란색 -->
+
 </resources>

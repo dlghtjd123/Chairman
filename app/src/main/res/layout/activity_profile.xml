@@ -2,86 +2,91 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
         <!-- 프로필 사진 -->
         <ImageView
             android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/user_profile"
-            android:background="@drawable/circle_border"
-            android:scaleType="centerCrop"
-            android:contentDescription="프로필 사진" />
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_profile_placeholder"
+            android:background="@drawable/circle_background"
+            android:elevation="4dp" />
 
         <!-- 사용자 이름 -->
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginTop="16dp"
+            android:text="홍길동"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:fontFamily="sans-serif-medium" />
 
         <!-- 사용자 이메일 -->
         <TextView
             android:id="@+id/user_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="example@example.com"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
+            android:textColor="#808080"
+            android:fontFamily="sans-serif" />
 
         <!-- 사용자 전화번호 -->
         <TextView
             android:id="@+id/user_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="+82 10-1234-5678"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#808080"
+            android:fontFamily="sans-serif" />
 
         <!-- 사용자 주소 -->
         <TextView
             android:id="@+id/user_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="서울특별시 강남구"
             android:textSize="16sp"
-            android:layout_marginBottom="16dp" />
+            android:textColor="#808080"
+            android:fontFamily="sans-serif" />
 
         <!-- 프로필 수정 버튼 -->
         <Button
             android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="수정"
-            android:backgroundTint="#00CED1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginTop="30dp"
+            android:text="프로필 수정"
+            android:backgroundTint="@android:color/black"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif-medium"
+            android:elevation="4dp" />
 
         <!-- 로그아웃 버튼 -->
         <Button
             android:id="@+id/logout_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="로그아웃"
-            android:backgroundTint="#A52A2A"
-            android:textColor="@android:color/white" />
-
-        <!-- 뒤로가기 버튼 -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/back_button"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_gravity="bottom"
-            android:text="뒤로가기"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#808080" />
+            android:text="로그아웃"
+            android:backgroundTint="#E53935"
+            android:textColor="@android:color/white"
+            android:fontFamily="sans-serif-medium"
+            android:elevation="4dp" />
     </LinearLayout>
 </ScrollView>
