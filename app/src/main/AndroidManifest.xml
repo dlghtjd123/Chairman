@@ -18,6 +18,17 @@
         android:theme="@style/Theme.Chairman"
         tools:targetApi="31"
         tools:ignore="SelectedPhotoAccess">
+
+        <!-- 인트로 화면: 앱 시작 시 첫 화면으로 설정 -->
+        <activity
+            android:name=".IntroActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".admin.WaitingListActivity"
             android:exported="false" />
@@ -35,22 +46,16 @@
             android:exported="false" />
         <activity
             android:name=".user.RentalActivity"
-            android:exported="false" /> <!-- 회원가입 화면 -->
+            android:exported="false" />
         <activity
             android:name=".normal.SignUpActivity"
-            android:exported="false" /> <!-- 로그인 화면: 앱이 시작될 때 첫 화면으로 설정 -->
+            android:exported="false" />
+
+        <!-- 로그인 화면 -->
         <activity
             android:name=".normal.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- 메인 화면 -->
-        <activity
-            android:name=".MainActivity"
             android:exported="true" />
+
         <activity
             android:name=".user.InstitutionListActivity"
             android:exported="false" />
