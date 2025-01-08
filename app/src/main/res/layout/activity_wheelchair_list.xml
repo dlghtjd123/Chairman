@@ -15,13 +15,32 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     </com.google.android.material.appbar.AppBarLayout>
+    <!-- 안내 문구 추가 -->
+
+    <TextView
+        android:id="@+id/notice_text"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="30dp"
+        android:background="#FFDDDD"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="* 대여를 위해 기관 방문 시 신분증을 필히 지참해주세요."
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#D32F2F"
+        android:textSize="17sp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
     <!-- 콘텐츠 영역 -->
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="556dp"
+        android:layout_marginTop="80dp"
         android:background="#FFFFFF"
         android:gravity="center"
         android:orientation="vertical"
@@ -35,12 +54,12 @@
             android:layout_height="100dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_selector"
+            android:drawableTop="@drawable/adultwheelchair"
             android:gravity="center"
             android:text="성인용 대여 가능: \n0"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:backgroundTint="@null"
-            android:drawableTop="@drawable/adultwheelchair"/>
+            app:backgroundTint="@null" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/child_button"
@@ -49,12 +68,12 @@
             android:layout_height="100dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_selector"
+            android:drawableTop="@drawable/childwheelchair"
             android:gravity="center"
             android:text="유아용 대여 가능: \n0"
             android:textColor="#000000"
             android:textSize="16sp"
-            app:backgroundTint="@null"
-            android:drawableTop="@drawable/childwheelchair"/>
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/check_rental_button"
@@ -69,6 +88,23 @@
     </LinearLayout>
 
     <!-- 프로필 버튼을 오른쪽 상단에 배치 -->
+
+    <TextView
+        android:id="@+id/inquiry_text"
+        android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:layout_marginBottom="30dp"
+        android:background="#E6E6E6"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="문의사항 Tel: 010-____-____    Email: AAA@suwon.ac.kr"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#D32F2F"
+        android:textSize="14sp"
+        app:layout_anchor="@+id/linearLayout2"
+        app:layout_anchorGravity="bottom|center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <Button
         android:id="@+id/profile_button"
         android:layout_width="56dp"
