@@ -57,6 +57,11 @@ public class WheelchairStatusActivity extends AppCompatActivity {
             public void onAvailable(WheelchairDetailResponse wheelchair) {
                 updateWheelchairStatus(wheelchair.getWheelchairId(), "AVAILABLE");
             }
+
+            @Override
+            public void onBroken(WheelchairDetailResponse wheelchair) {
+                updateWheelchairStatus(wheelchair.getWheelchairId(), "BROKEN");
+            }
         });
         recyclerViewDetails.setAdapter(wheelchairDetailsAdapter);
 

@@ -15,4 +15,6 @@
     <color name="secondaryColor">#FF9800</color> <!-- 주황색 -->
     <color name="accentColor">#2196F3</color> <!-- 파란색 -->
 
+    <color name="transparent">#00000000</color>
+
 </resources>

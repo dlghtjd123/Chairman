@@ -7,4 +7,24 @@
     </style>
 
     <style name="Theme.Chairman" parent="Base.Theme.Chairman" />
+
+    <style name="CustomDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+    </style>
+
+    <style name="CustomTimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+    </style>
+
+    <style name="CustomTimePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@drawable/rounded_background</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+
 </resources>

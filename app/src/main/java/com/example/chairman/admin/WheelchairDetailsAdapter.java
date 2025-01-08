@@ -25,6 +25,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
         void onRent(WheelchairDetailResponse wheelchair);
         void onReturn(WheelchairDetailResponse wheelchair);
         void onAvailable(WheelchairDetailResponse wheelchair);
+        void onBroken(WheelchairDetailResponse wheelchair);
     }
 
     public WheelchairDetailsAdapter(List<WheelchairDetailResponse> wheelchairList, OnActionListener actionListener) {
@@ -81,21 +82,31 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
                     holder.buttonRent.setVisibility(View.VISIBLE);
                     holder.buttonReturn.setVisibility(View.GONE);
                     holder.buttonAvailable.setVisibility(View.GONE);
+                    holder.buttonBroken.setVisibility(View.GONE);
                     break;
                 case "RENTED":
                     holder.buttonRent.setVisibility(View.GONE);
                     holder.buttonReturn.setVisibility(View.VISIBLE);
                     holder.buttonAvailable.setVisibility(View.GONE);
+                    holder.buttonBroken.setVisibility(View.GONE);
                     break;
                 case "BROKEN":
                     holder.buttonRent.setVisibility(View.GONE);
                     holder.buttonReturn.setVisibility(View.GONE);
                     holder.buttonAvailable.setVisibility(View.VISIBLE);
+                    holder.buttonBroken.setVisibility(View.GONE);
+                    break;
+                case "AVAILABLE":
+                    holder.buttonRent.setVisibility(View.GONE);
+                    holder.buttonReturn.setVisibility(View.GONE);
+                    holder.buttonAvailable.setVisibility(View.GONE);
+                    holder.buttonBroken.setVisibility(View.VISIBLE);
                     break;
                 default:
                     holder.buttonRent.setVisibility(View.GONE);
                     holder.buttonReturn.setVisibility(View.GONE);
                     holder.buttonAvailable.setVisibility(View.GONE);
+                    holder.buttonBroken.setVisibility(View.GONE);
                     break;
             }
         } else {
@@ -113,6 +124,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
         holder.buttonRent.setOnClickListener(v -> actionListener.onRent(wheelchair)); // 수락 버튼 동작 정의
         holder.buttonReturn.setOnClickListener(v -> actionListener.onReturn(wheelchair)); // 반납 버튼 동작 정의
         holder.buttonAvailable.setOnClickListener(v -> actionListener.onAvailable(wheelchair)); // 사용 가능 버튼 동작 정의
+        holder.buttonBroken.setOnClickListener(v -> actionListener.onBroken(wheelchair));
     }
 
 
@@ -126,7 +138,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textViewWheelchairId, textViewStatus, textViewType, textViewRentalStatus, textViewUserName, textViewUserPhone;
         LinearLayout buttonLayout;
-        Button buttonRent, buttonReturn, buttonAvailable;
+        Button buttonRent, buttonReturn, buttonAvailable, buttonBroken;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,6 +152,7 @@ public class WheelchairDetailsAdapter extends RecyclerView.Adapter<WheelchairDet
             buttonRent = itemView.findViewById(R.id.buttonRent);
             buttonReturn = itemView.findViewById(R.id.buttonReturn);
             buttonAvailable = itemView.findViewById(R.id.buttonAvailable);
+            buttonBroken = itemView.findViewById(R.id.buttonBroken);
         }
     }
 }
