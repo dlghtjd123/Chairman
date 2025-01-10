@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">#000000</item> <!-- 텍스트 색상 -->
+        <item name="android:padding">16dp</item> <!-- 다이얼로그 기본 패딩 -->
+        <item name="android:background">#FFFFFF</item> <!-- 배경 색상 -->
+        <item name="android:scrollbars">vertical</item> <!-- 세로 스크롤 추가 -->
+    </style>
+</resources>
