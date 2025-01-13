@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.chairman"
+    namespace = "com.usw.chairman"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.chairman"
+        applicationId = "com.usw.chairman"
         minSdk = 33
         targetSdk = 34
         versionCode = 1
@@ -29,8 +29,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
