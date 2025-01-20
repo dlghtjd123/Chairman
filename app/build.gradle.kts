@@ -24,10 +24,12 @@ android {
                 "proguard-rules.pro"
             )
         }
-        buildFeatures{
-            viewBinding = true;
-        }
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -35,7 +37,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -45,11 +46,9 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
-    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
-    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
-    implementation ("com.google.android.material:material:1.9.0")
-    //implementation(kotlin("script-runtime"))
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // 안정화 버전
+    implementation("com.squareup.okhttp3:okhttp:4.11.0") // 안정화 버전
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 }

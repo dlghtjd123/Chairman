@@ -22,16 +22,16 @@
     <TextView
         android:id="@+id/notice_text"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:background="#FFDDDD"
         android:gravity="center"
         android:padding="8dp"
         android:text="* 대여를 위해 기관 방문 시 신분증을 필히 지참해주세요."
-        android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#D32F2F"
         android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
@@ -92,12 +92,12 @@
     <TextView
         android:id="@+id/inquiry_text"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:background="#E6E6E6"
         android:gravity="center"
         android:padding="8dp"
-        android:text="문의사항 Tel: 010-____-____    Email: AAA@suwon.ac.kr"
+        android:text="문의사항 Tel: 010-9824-0919    Email: devhyxuk@gmail.com"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#D32F2F"
         android:textSize="14sp"
